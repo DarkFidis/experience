@@ -1,0 +1,6 @@
+{
+  "*.ts": [
+    "eslint",
+    "jest --coverage -c src/test/staged/jest.config.js --findRelatedTests"
+  ]
+}
