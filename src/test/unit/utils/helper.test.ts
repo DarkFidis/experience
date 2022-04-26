@@ -64,6 +64,20 @@ describe('helper unit tests', () => {
       await expect(promise).rejects.toThrowError(expectedError)
     })
   })
+  describe('isArray', () => {
+    it('should return true if input is an array', () => {
+      // When
+      const result = helper.isArray(['foo', 'bar'])
+      expect(result).toBe(true)
+    })
+  })
+  describe('isObject', () => {
+    it('should return true if input is an array', () => {
+      // When
+      const result = helper.isObject({ foo: 'bar'})
+      expect(result).toBe(true)
+    })
+  })
   describe('repeat', () => {
     test('should repeat 3 times', () => {
       // Given
