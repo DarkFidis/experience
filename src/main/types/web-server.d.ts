@@ -1,10 +1,10 @@
 import * as express from 'express'
-import { Server } from "http"
-import { ServerOptions } from "https";
-import { Serviceable } from "./service";
-import { Loggerable } from "./logger";
+import { Server as HttpServer } from 'http'
+import { Server as HttpsServer } from 'https'
+import { ServerOptions } from 'https'
 
-export type RegisterApp = (app: express.Application) => Promise<void>
+import { Loggerable } from './logger'
+import { Serviceable } from './service'
 
 export interface WebServerConfig {
   name?: string
@@ -16,6 +16,7 @@ export interface WebServerConfig {
   log?: boolean
   ping?: boolean
   poweredBy?: boolean | string
+  proxy?: WebServerConfigProxy
   serverOptions?: ServerOptions
   staticDir?: string
   tls?: boolean
@@ -28,22 +29,32 @@ export interface WebServerConfigListen {
   path?: string
 }
 
+export interface WebServerConfigProxy {
+  username?: string
+  pass?: string
+  address: string
+  port: number
+  protocol?: 'http' | 'https'
+}
+
+export type RegisterApp = (app: express.Application) => void
+
 export interface StaticWebServerable {
   defaultConfig: WebServerConfig
+
   new (log: Loggerable, registerApp?: RegisterApp): WebServerable
 }
 
 export interface WebServerable extends Serviceable<WebServerConfig> {
   readonly app?: express.Application
-  readonly server?: Server
+  readonly server?: HttpServer | HttpsServer
   readonly url?: string
-  init(): Promise<void>
-  start(): Promise<boolean>
-  stop(): Promise<boolean>
-  registerMw(app: express.Application): Promise<void>
-  registerPingMw(app: express.Application): void
-  registerHelloWorldMw(app: express.Application): void
+  readonly startedAt?: string
+  registerApp?: RegisterApp
   disableEtag(app: express.Application): void
+  registerLogMw(app: express.Application): void
+  registerMw(app: express.Application): void
+  registerPingMw(app: express.Application): void
   registerPoweredByMw(app: express.Application): void
   setTrustProxy(app: express.Application): void
 }
