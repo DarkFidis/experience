@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Modify } from "./helper";
 
 export interface ErrorMw {
   defaultCode: string
@@ -21,9 +22,9 @@ export interface ErrorData {
 
 export type RequestAsyncHandler = (req: Request, res: Response) => Promise<void> | void
 
-export interface RichError extends Error {
+export interface RichError extends Modify<Error, { message?: string }> {
   code?: string
   statusCode?: number
-  orig?: { errors: string[] }
+  orig?: Error & { errors?: string[] }
   extra?: unknown
 }
