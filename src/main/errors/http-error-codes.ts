@@ -3,6 +3,8 @@ enum ErrorCode {
   // SERVER_ERROR = 'SERVER_ERROR',
   BAD_REQUEST = 'BAD_REQUEST',
   FORBIDDEN = 'FORBIDDEN',
+  GATEWAY_TIMEOUT = 'GATEWAY_TIMEOUT',
+  IM_A_TEAPOT = 'IM_A_TEAPOT',
   INTERNAL = 'INTERNAL',
   NOT_FOUND = 'NOT_FOUND',
   // CONFLICT = 'CONFLICT',
@@ -55,7 +57,7 @@ enum ErrorStatusCode {
    notImplemented= 501,
    */
   SERVICE_UNAVAILABLE = 503,
-  // GATEWAY_TIMEOUT = 504,
+  GATEWAY_TIMEOUT = 504,
   /*,
    versionNotSupported= 505,
    variantAlsoNegotiates= 506,

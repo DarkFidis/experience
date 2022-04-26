@@ -38,6 +38,8 @@ export interface StaticNotFoundErrorable {
 
 export type StaticServiceUnavailableErrorable = StaticNotFoundErrorable
 
+export type StaticGatewayTimeoutErrorable = StaticServiceUnavailableErrorable
+
 export interface StaticTooManyRequestsErrorable {
   new (quotaCount: number, quotaTime: number, extra?: unknown): HttpErrorable
 }

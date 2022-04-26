@@ -7,7 +7,7 @@ import { ErrorCode, ErrorStatusCode } from './http-error-codes'
 class TeapotError extends HttpError {
   public static defaultMessage = 'What do you think I am ?'
   constructor(message: string | Error = TeapotError.defaultMessage, orig?: Error) {
-    super(ErrorCode.FORBIDDEN, ErrorStatusCode.FORBIDDEN, message, orig)
+    super(ErrorCode.IM_A_TEAPOT, ErrorStatusCode.IM_A_TEAPOT, message, orig)
   }
 }
 

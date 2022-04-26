@@ -151,7 +151,7 @@ module.exports = {
       },
       open: {
         description: 'Open tests coverage report',
-        script: `open-cli ${join(baseDir, 'dist/coverage/index.html')}`,
+        script: `open-cli ${join(baseDir, 'dist/coverage/all/index.html')}`,
       },
       unit: {
         default: {
