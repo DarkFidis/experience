@@ -17,7 +17,7 @@ describe('log unit tests', () => {
     const log = ({
       init: jest.fn(),
     } as unknown) as jest.Mocked<Loggerable>
-    when(Logger).calledWith('TYPE-GQL').mockReturnValue(log)
+    when(Logger).calledWith('Express-template').mockReturnValue(log)
     // When
     const result = require('../../main/log')
     // Then

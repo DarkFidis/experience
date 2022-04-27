@@ -3,7 +3,7 @@ const cluster = {
 }
 
 const log = {
-  name: 'TYPE-GQL'
+  name: 'Express-template'
 }
 
 export {

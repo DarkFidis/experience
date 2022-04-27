@@ -10,6 +10,7 @@
   "main": "index.js",
   "scripts": {
     "nps": "nps",
+    "start": "nps start",
     "test": "nps test"
   },
   "keywords": [],
