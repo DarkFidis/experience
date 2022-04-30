@@ -29,22 +29,10 @@ import { ServiceBase } from './service-base'
 class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
   public static readonly defaultConfig: WebServerConfig = {
     gitVersion: true,
-    listen: { port: 3101 },
+    listen: { port: 8342 },
     log: true,
     ping: true,
     trustProxy: false,
-  }
-
-  public get app(): express.Application | undefined {
-    return this._app
-  }
-
-  public get url(): string | undefined {
-    return this._url
-  }
-
-  public get server(): HttpServer | HttpsServer | undefined {
-    return this._server
   }
 
   public registerApp?: RegisterApp
@@ -58,6 +46,18 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
   constructor(log: Loggerable, registerApp?: RegisterApp) {
     super('web-server', log, WebServer.defaultConfig)
     this.registerApp = registerApp
+  }
+
+  public get app(): express.Application | undefined {
+    return this._app
+  }
+
+  public get url(): string | undefined {
+    return this._url
+  }
+
+  public get server(): HttpServer | HttpsServer | undefined {
+    return this._server
   }
 
   public async end(): Promise<boolean> {
