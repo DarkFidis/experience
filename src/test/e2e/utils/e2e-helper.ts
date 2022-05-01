@@ -2,7 +2,7 @@ import { log } from "../../../main/log";
 import { Response } from "got";
 import { E2eHelper } from "../../types/e2e-utils";
 
-export const e2eHelper: E2eHelper = {
+const e2eHelper: E2eHelper = {
   expectResponse: (res: Response, statusCode: number, body?): void => {
     try {
       expect(res.statusCode).toEqual(statusCode)
@@ -44,3 +44,5 @@ export const e2eHelper: E2eHelper = {
       }, 10)
     }),
 }
+
+export = e2eHelper

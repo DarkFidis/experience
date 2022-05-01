@@ -2,11 +2,11 @@ import got from 'got'
 
 import { ClientHelper } from "../../types/e2e-utils";
 
-export const clientHelper: ClientHelper = {
+const clientHelper: ClientHelper = {
   baseUrl: 'http://localhost:8342',
   client: got,
   init: () => {
-    const { webServer } = require('../../main/server')
+    const { webServer } = require('../../../main/server')
     if (process.env.BASE_URL) {
       clientHelper.baseUrl = process.env.BASE_URL
     } else if (webServer.url) {
@@ -25,3 +25,5 @@ export const clientHelper: ClientHelper = {
     })
   },
 }
+
+export = clientHelper
