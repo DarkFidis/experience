@@ -70,6 +70,7 @@ describe('web server unit tests', () => {
         },
         log: true,
         ping: true,
+        poweredBy: "Express-template",
         trustProxy: false,
       })
     })

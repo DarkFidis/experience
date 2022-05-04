@@ -33,6 +33,7 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
     log: true,
     ping: true,
     trustProxy: false,
+    poweredBy: 'Express-template'
   }
 
   public registerApp?: RegisterApp
