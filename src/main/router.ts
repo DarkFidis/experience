@@ -5,6 +5,8 @@ import {
   raw as rawBodyParserFactory,
   urlencoded as urlencodedBodyParserFactory,
 } from "body-parser"
+import { toExpressMw } from './utils/helper'
+import { helloWorldMw } from "./middlewares/hello-world";
 
 const jsonBodyParserMw = jsonBodyParserFactory()
 const urlencodedBodyParserMw = urlencodedBodyParserFactory({ extended: false })
@@ -18,4 +20,5 @@ export const registerApp: RegisterApp = async (app) => {
     urlencodedBodyParserMw,
     rawBodyParserMw
   )
+  app.get('/', toExpressMw(helloWorldMw))
 }

@@ -13,6 +13,8 @@ describe('router unit tests', () => {
   let express: jest.Mocked<typeof jestExpress>
   let cookieParserMw: jest.Mock
   let registerApp: jest.Mocked<RegisterApp>
+  let helloWorldMw: jest.Mock
+  let toExpressMw: jest.Mock
   beforeAll(() => {
     jsonBodyParser = jest.fn()
     urlencodedBodyParser = jest.fn()
@@ -22,6 +24,10 @@ describe('router unit tests', () => {
       raw: jest.fn(),
       urlencoded: jest.fn(),
     }
+    jest.doMock('../../main/utils/helper')
+    ;({ toExpressMw } = require('../../main/utils/helper'))
+    jest.doMock('../../main/middlewares/hello-world')
+    ;({ helloWorldMw } = require('../../main/middlewares/hello-world'))
     when(bodyParser.json)
       .calledWith()
       .mockReturnValue(jsonBodyParser)
@@ -47,6 +53,8 @@ describe('router unit tests', () => {
     test('should register app middlewares', () => {
       // Given
       const app = express()
+      const helloWorldExpressMw = jest.fn()
+      when(toExpressMw).calledWith(helloWorldMw).mockReturnValue(helloWorldExpressMw)
       // When
       registerApp(app as Application)
       // Then
@@ -56,6 +64,7 @@ describe('router unit tests', () => {
         urlencodedBodyParser,
         rawBodyParser,
       )
+      expect(app.get).toHaveBeenCalledWith('/', helloWorldExpressMw)
     })
   })
 })
