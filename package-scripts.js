@@ -28,29 +28,9 @@ module.exports = {
       },
     },
     build: {
-      assets: {
-        default: {
-          description: 'Copy assets to built dir',
-          script: concurrent.nps('build.assets.config', 'build.assets.gitversion'),
-        },
-        config: {
-          description: 'Copy config assets to built dir',
-          script: `n-copy --source ${baseDir} --destination ${join(
-            baseDir,
-            'dist/built/',
-          )} 'config/**/*'`,
-        },
-        gitversion: {
-          description: 'Copy gitversion asset to built dir',
-          script: `n-copy --source ${baseDir} --destination ${join(
-            baseDir,
-            'dist/built/',
-          )} .gitversion`,
-        },
-      },
       default: {
         description: 'Build all',
-        script: concurrent.nps('build.assets', 'build.src'),
+        script: 'nps build.src',
       },
       gitversion: {
         description: 'set git version to .gitversion file',
