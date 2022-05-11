@@ -1,7 +1,7 @@
+import { cluster as clusterConfig } from './config'
 import { log } from './log'
 import { Cluster } from './utils/cluster'
 import { run as runWorker } from './worker'
-import { cluster as clusterConfig } from './config'
 
 const run = (): void => {
   const cluster = new Cluster(log)

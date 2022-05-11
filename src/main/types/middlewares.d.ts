@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
-import { Modify } from "./helper";
+
+import { Modify } from './helper'
 
 export interface ErrorMw {
   defaultCode: string

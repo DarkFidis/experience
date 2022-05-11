@@ -1,6 +1,6 @@
-import { webServer } from "./server";
-import { Workerable } from "./types/worker";
-import { log } from "./log";
+import { log } from './log'
+import { webServer } from './server'
+import { Workerable } from './types/worker'
 
 const worker: Workerable = {
   handleSignal: async (name) => {

@@ -6,10 +6,10 @@ import { resolve } from 'path'
 import { IAppenderConfiguration, IBasicLayoutConfiguration, Logger as TsLogger } from 'ts-log-debug'
 
 import { Mapable } from '../types/basic-types'
+import { Caller } from '../types/caller'
+import { Loggerable, LoggerConfig, LogLevel, StaticLoggerable } from '../types/logger'
+import { getCaller } from './caller'
 import { staticImplements } from './helper'
-import { Loggerable, LoggerConfig, LogLevel, StaticLoggerable } from "../types/logger";
-import { Caller } from "../types/caller";
-import { getCaller } from "./caller";
 
 const baseDir = resolve(__dirname, '..', '..', '..')
 
@@ -24,30 +24,30 @@ let defaultAppenders: Mapable<IAppenderConfiguration> | undefined
 
 switch (env) {
   case 'production':
-  {
-    defaultLayout = {
-      pattern: '%d %p %c %x{workerId} %m',
-      tokens,
-      type: 'pattern',
+    {
+      defaultLayout = {
+        pattern: '%d %p %c %x{workerId} %m',
+        tokens,
+        type: 'pattern',
+      }
+      defaultAppenders = {
+        errlog: {
+          layout: defaultLayout,
+          levels: ['error', 'fatal', 'warn'],
+          type: 'stderr',
+        },
+        stdlog: {
+          layout: defaultLayout,
+          levels: ['trace', 'debug', 'info'],
+          type: 'stdout',
+        },
+      }
     }
-    defaultAppenders = {
-      errlog: {
-        layout: defaultLayout,
-        levels: ['error', 'fatal', 'warn'],
-        type: 'stderr',
-      },
-      stdlog: {
-        layout: defaultLayout,
-        levels: ['trace', 'debug', 'info'],
-        type: 'stdout',
-      },
-    }
-  }
     break
   case 'test':
-  {
-    defaultAppenders = { 'console-log': { type: 'console' } }
-  }
+    {
+      defaultAppenders = { 'console-log': { type: 'console' } }
+    }
     break
   case 'development':
   default: {

@@ -1,4 +1,5 @@
-import "reflect-metadata"
+import 'reflect-metadata'
+
 import { cluster } from './config'
 import { log } from './log'
 import { run as runMaster } from './master'

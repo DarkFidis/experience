@@ -17,12 +17,7 @@ import {
   WebServerable,
   WebServerConfig,
 } from '../types/web-server'
-import {
-  fromCallback,
-  staticImplements,
-  toExpressErrorMw,
-  toExpressMw,
-} from '../utils/helper'
+import { fromCallback, staticImplements, toExpressErrorMw, toExpressMw } from '../utils/helper'
 import { ServiceBase } from './service-base'
 
 @staticImplements<StaticWebServerable>()
@@ -32,8 +27,8 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
     listen: { port: 8342 },
     log: true,
     ping: true,
+    poweredBy: 'Express-template',
     trustProxy: false,
-    poweredBy: 'Express-template'
   }
 
   public registerApp?: RegisterApp

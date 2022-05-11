@@ -1,4 +1,4 @@
-import { Callback, Helperable } from "../types/helper";
+import { Callback, Helperable } from '../types/helper'
 
 const helper: Helperable = {
   asCallback: (promise, cb) => {
@@ -28,19 +28,25 @@ const helper: Helperable = {
       iterator(index)
     })
   },
-  staticImplements: <T>() => (__: T) => {},
-  toExpressErrorMw: (errorHandler) => (err, req, res, next): void => {
-    helper.asCallback<void>(
-      Promise.resolve().then(() => errorHandler(err, req, res)),
-      next,
-    )
-  },
-  toExpressMw: (handler) => (req, res, next): void => {
-    helper.asCallback<void>(
-      Promise.resolve().then(() => handler(req, res)),
-      next,
-    )
-  },
+  staticImplements:
+    <T>() =>
+    (__: T) => {},
+  toExpressErrorMw:
+    (errorHandler) =>
+    (err, req, res, next): void => {
+      helper.asCallback<void>(
+        Promise.resolve().then(() => errorHandler(err, req, res)),
+        next,
+      )
+    },
+  toExpressMw:
+    (handler) =>
+    (req, res, next): void => {
+      helper.asCallback<void>(
+        Promise.resolve().then(() => handler(req, res)),
+        next,
+      )
+    },
 }
 
 export = helper

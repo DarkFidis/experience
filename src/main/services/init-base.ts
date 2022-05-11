@@ -1,5 +1,5 @@
+import { Loggerable } from '../types/logger'
 import { Initializable } from '../types/service'
-import { Loggerable } from "../types/logger";
 
 abstract class InitBase<T> implements Initializable<T> {
   protected _defaultConfig: T

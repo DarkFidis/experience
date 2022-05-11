@@ -1,5 +1,6 @@
-import {ErrorData, ErrorMw, RichError} from "../types/middlewares";
 import { Request, Response } from 'express'
+
+import { ErrorData, ErrorMw, RichError } from '../types/middlewares'
 
 const error: ErrorMw = {
   defaultCode: 'SERVICE_UNAVAILABLE',
@@ -23,7 +24,7 @@ const error: ErrorMw = {
     const statusCode = err.statusCode || 500
     res.status(statusCode)
     res.json(data)
-  }
+  },
 }
 
 export = error

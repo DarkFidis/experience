@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express'
 
 export const helloWorldMw = (_: Request, res: Response) => {
-  res.json({ hello: 'world'})
+  res.json({ hello: 'world' })
 }

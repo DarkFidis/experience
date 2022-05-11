@@ -1,12 +1,9 @@
 const cluster = {
-  workers: 0
+  workers: 0,
 }
 
 const log = {
-  name: 'Express-template'
+  name: 'Express-template',
 }
 
-export {
-  cluster,
-  log,
-}
+export { cluster, log }

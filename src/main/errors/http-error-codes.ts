@@ -37,7 +37,7 @@ enum ErrorStatusCode {
    requestedRangeNotSatisfiable= 416,
    */
   // EXPECTATION_FAILED = 417,
-   IM_A_TEAPOT = 418,
+  IM_A_TEAPOT = 418,
   /*
    unprocessableEntity= 422,
    locked= 423,
@@ -68,4 +68,4 @@ enum ErrorStatusCode {
    */
 }
 
-export { ErrorStatusCode, ErrorCode }
+export { ErrorCode, ErrorStatusCode }

@@ -1,7 +1,7 @@
 import { relative } from 'path'
 import * as stackback from 'stackback'
-import { GetCaller } from "../types/caller";
 
+import { GetCaller } from '../types/caller'
 
 const getCaller: GetCaller = (baseDir, pos = 0) => {
   const e = new Error()

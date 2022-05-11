@@ -1,6 +1,6 @@
 import { HttpErrorable, StaticHttpErrorable } from '../types/errors'
-import { CustomError } from './custom-error'
 import { staticImplements } from '../utils/helper'
+import { CustomError } from './custom-error'
 import { ErrorCode } from './http-error-codes'
 
 @staticImplements<StaticHttpErrorable>()

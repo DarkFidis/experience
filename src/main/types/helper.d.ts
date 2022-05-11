@@ -23,5 +23,3 @@ export interface Helperable {
 export type Callback<T> = (err: unknown, value?: T) => void
 
 export type Modify<T, R> = Omit<T, keyof R> & R
-
-
