@@ -1,0 +1,41 @@
+root: true
+parser: '@typescript-eslint/parser'
+parserOptions:
+  tsconfigRootDir: .
+  project:
+    - ./tsconfig.json
+plugins:
+  - '@typescript-eslint'
+  - prettier
+  - simple-import-sort
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:@typescript-eslint/recommended-requiring-type-checking
+  - prettier
+rules:
+  '@typescript-eslint/member-ordering':
+    - error
+    - default:
+        - signature
+        - field
+        - method
+      classes:
+        - public-static-field
+        - public-instance-method
+  '@typescript-eslint/no-implied-eval': off
+  '@typescript-eslint/no-unsafe-assignment': off
+  '@typescript-eslint/no-unsafe-call': off
+  '@typescript-eslint/no-unsafe-member-access': off
+  '@typescript-eslint/no-unsafe-return': off
+  '@typescript-eslint/no-var-requires': off
+  '@typescript-eslint/restrict-template-expressions': off
+  '@typescript-eslint/unbound-method': off
+  no-template-curly-in-string: error
+  prefer-template: error
+  prettier/prettier: error
+  simple-import-sort/imports: error
+  simple-import-sort/exports: error
+  sort-imports: off
+  sort-keys: error
