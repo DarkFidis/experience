@@ -1,6 +1,6 @@
 import got from 'got'
 
-import { ClientHelper } from "../../types/e2e-utils";
+import { ClientHelper } from '../../types/e2e-utils'
 
 const clientHelper: ClientHelper = {
   baseUrl: 'http://localhost:8342',
@@ -16,11 +16,11 @@ const clientHelper: ClientHelper = {
       prefixUrl: clientHelper.baseUrl,
       responseType: 'json',
       retry: {
-        limit: 0
+        limit: 0,
       },
       throwHttpErrors: false,
       timeout: {
-        request: 5000
+        request: 5000,
       },
     })
   },

@@ -1,5 +1,5 @@
 import { ErrorCode, ErrorStatusCode } from '../../../main/errors/http-error-codes'
-import { StaticTeapotErrorable } from "../../../main/types/errors";
+import { StaticTeapotErrorable } from '../../../main/types/errors'
 
 describe('Im a teapot error unit tests', () => {
   let HttpError: jest.Mocked<Error>

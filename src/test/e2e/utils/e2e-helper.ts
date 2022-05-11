@@ -1,6 +1,7 @@
-import { log } from "../../../main/log";
-import { Response } from "got";
-import { E2eHelper } from "../../types/e2e-utils";
+import { Response } from 'got'
+
+import { log } from '../../../main/log'
+import { E2eHelper } from '../../types/e2e-utils'
 
 const e2eHelper: E2eHelper = {
   expectResponse: (res: Response, statusCode: number, body?): void => {

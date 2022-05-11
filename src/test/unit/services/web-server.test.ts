@@ -70,7 +70,7 @@ describe('web server unit tests', () => {
         },
         log: true,
         ping: true,
-        poweredBy: "Express-template",
+        poweredBy: 'Express-template',
         trustProxy: false,
       })
     })
@@ -366,7 +366,7 @@ describe('web server unit tests', () => {
           // When
           try {
             await webServer.run()
-          } catch(err) {
+          } catch (err) {
             // Then
             expect(err).toBeInstanceOf(InternalError)
             expect(InternalError).toHaveBeenNthCalledWith(1, 'undefined app : cannot listen')
@@ -384,7 +384,7 @@ describe('web server unit tests', () => {
           // When
           try {
             await webServer.run()
-          } catch(err) {
+          } catch (err) {
             // Then
             expect(err.message).toBe(error.message)
             expect(fsPromises.unlink).toHaveBeenCalledWith(webServer.config.listen.path)
@@ -406,7 +406,7 @@ describe('web server unit tests', () => {
           // When
           try {
             await webServer.run()
-          } catch(err) {
+          } catch (err) {
             // Then
             expect(err).toBeInstanceOf(InternalError)
             expect(InternalError).toHaveBeenNthCalledWith(1, 'server address is undefined')
@@ -501,7 +501,7 @@ describe('web server unit tests', () => {
         })
         test('should register middlewares', () => {
           // Given
-          const logExpressMw: RequestHandler = ('log-express' as unknown) as RequestHandler
+          const logExpressMw: RequestHandler = 'log-express' as unknown as RequestHandler
           log.express.mockImplementation(() => logExpressMw)
           const errorExpressMw = jest.fn()
           when(toExpressErrorMw).calledWith(errorMw).mockReturnValue(errorExpressMw)
@@ -520,7 +520,7 @@ describe('web server unit tests', () => {
         test('should register middlewares given registerAppMw is defined', () => {
           // Given
           webServer.registerApp = jest.fn()
-          const logExpressMw: RequestHandler = ('log-express' as unknown) as RequestHandler
+          const logExpressMw: RequestHandler = 'log-express' as unknown as RequestHandler
           log.express.mockImplementation(() => logExpressMw)
           const errorExpressMw = jest.fn()
           when(toExpressErrorMw).calledWith(errorMw).mockReturnValue(errorExpressMw)
@@ -591,7 +591,7 @@ describe('web server unit tests', () => {
             .calledWith(expect.any(Function))
             .mockImplementation((handler) => {
               const req = {} as Request
-              const res = ({ setHeader: jest.fn() } as unknown) as Response
+              const res = { setHeader: jest.fn() } as unknown as Response
               handler(req, res)
               expect(res.setHeader).toHaveBeenCalledWith('x-powered-by', 'mypowered')
               return expressMw
@@ -637,7 +637,7 @@ describe('web server unit tests', () => {
             .calledWith(expect.any(Function))
             .mockImplementation((handler) => {
               const req = {} as Request
-              const res = ({ setHeader: jest.fn() } as unknown) as Response
+              const res = { setHeader: jest.fn() } as unknown as Response
               handler(req, res)
               expect(res.setHeader).toHaveBeenCalledWith(
                 'x-powered-by',
@@ -666,7 +666,7 @@ describe('web server unit tests', () => {
             .calledWith(expect.any(Function))
             .mockImplementation((handler) => {
               const req = {} as Request
-              const res = ({ setHeader: jest.fn() } as unknown) as Response
+              const res = { setHeader: jest.fn() } as unknown as Response
               handler(req, res)
               expect(res.setHeader).toHaveBeenCalledWith('x-powered-by', 'web-server@1.0.0')
               return expressMw
@@ -708,10 +708,7 @@ describe('web server unit tests', () => {
           // Given
           webServer._config = { ping: true }
           const app = express()
-          when(
-            (app.get as unknown) as
-              | jest.MockInstance<unknown, any[]>,
-          )
+          when(app.get as unknown as jest.MockInstance<unknown, any[]>)
             .calledWith('/ping', expect.any(Function))
             .mockImplementation((__, cb) => {
               const end = jest.fn()

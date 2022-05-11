@@ -1,7 +1,7 @@
-import * as clientHelper from "./client-helper";
-import { log } from "../../../main/log";
-import { E2eServer } from "../../types/e2e-utils";
+import { log } from '../../../main/log'
 import * as worker from '../../../main/worker'
+import { E2eServer } from '../../types/e2e-utils'
+import * as clientHelper from './client-helper'
 
 export const e2eServer: E2eServer = {
   start: async () => {

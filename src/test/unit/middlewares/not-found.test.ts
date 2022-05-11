@@ -29,11 +29,11 @@ describe('not found middleware unit tests', () => {
       const next = jest.fn()
       // When
       const fn = () =>
-        notFound((req as unknown) as ExpressRequest, (res as unknown) as ExpressResponse, next)
+        notFound(req as unknown as ExpressRequest, res as unknown as ExpressResponse, next)
       // Then
       try {
         fn()
-      } catch(err) {
+      } catch (err) {
         expect(err).toBeInstanceOf(NotFoundError)
         expect(next).not.toHaveBeenCalled()
       }
@@ -43,7 +43,7 @@ describe('not found middleware unit tests', () => {
       res.setHeadersSent(true)
       const next = jest.fn()
       // When
-      notFound((req as unknown) as ExpressRequest, (res as unknown) as ExpressResponse, next)
+      notFound(req as unknown as ExpressRequest, res as unknown as ExpressResponse, next)
       // Then
       expect(next).not.toHaveBeenCalled()
     })

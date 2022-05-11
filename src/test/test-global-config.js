@@ -6,4 +6,4 @@ global.console = {
   warn: jest.fn(),
   info: console.info,
   debug: console.debug,
-};
+}

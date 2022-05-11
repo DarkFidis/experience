@@ -71,4 +71,3 @@ describe('index unit tests', () => {
     expect(runWorker).not.toHaveBeenCalled()
   })
 })
-

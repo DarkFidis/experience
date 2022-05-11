@@ -1,5 +1,5 @@
 import { ErrorCode, ErrorStatusCode } from '../../../main/errors/http-error-codes'
-import { StaticInternalErrorable } from "../../../main/types/errors";
+import { StaticInternalErrorable } from '../../../main/types/errors'
 
 describe('internal error unit tests', () => {
   let HttpError: jest.Mocked<Error>

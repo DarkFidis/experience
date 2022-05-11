@@ -1,4 +1,4 @@
-import { Got, Response } from "got";
+import { Got, Response } from 'got'
 
 export interface ClientHelper {
   baseUrl: string

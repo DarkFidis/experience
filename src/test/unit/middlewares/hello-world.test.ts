@@ -13,8 +13,8 @@ describe('hello world middleware unit test', () => {
   })
   it('should respond with an object', () => {
     // When
-    helloWorldMw((req as unknown) as ExpressRequest, (res as unknown) as ExpressResponse)
+    helloWorldMw(req as unknown as ExpressRequest, res as unknown as ExpressResponse)
     // Then
-    expect(res.json).toHaveBeenCalledWith({ hello: 'world'})
+    expect(res.json).toHaveBeenCalledWith({ hello: 'world' })
   })
 })

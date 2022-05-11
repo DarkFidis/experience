@@ -7,7 +7,7 @@ import { Request } from 'jest-express/lib/request'
 import { Response } from 'jest-express/lib/response'
 
 import { ErrorCode } from '../../../main/errors/http-error-codes'
-import { RichError } from "../../../main/types/middlewares";
+import { RichError } from '../../../main/types/middlewares'
 
 describe('format error middleware unit test', () => {
   let errorMw: ErrorRequestHandler

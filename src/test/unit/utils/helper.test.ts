@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { when } from 'jest-when'
-import { Callback, Helperable } from "../../../main/types/helper";
+
+import { Callback, Helperable } from '../../../main/types/helper'
 
 describe('helper unit tests', () => {
   let helper: Helperable
@@ -74,7 +75,7 @@ describe('helper unit tests', () => {
   describe('isObject', () => {
     it('should return true if input is an array', () => {
       // When
-      const result = helper.isObject({ foo: 'bar'})
+      const result = helper.isObject({ foo: 'bar' })
       expect(result).toBe(true)
     })
   })

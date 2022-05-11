@@ -1,7 +1,7 @@
 import { when } from 'jest-when'
-import { Loggerable } from '../../main/types/logger'
 
 import { log as logConfig } from '../../main/config'
+import { Loggerable } from '../../main/types/logger'
 
 describe('log unit tests', () => {
   let Logger: jest.Mock
@@ -14,9 +14,9 @@ describe('log unit tests', () => {
   })
   test('should create and initialize log', () => {
     // Given
-    const log = ({
+    const log = {
       init: jest.fn(),
-    } as unknown) as jest.Mocked<Loggerable>
+    } as unknown as jest.Mocked<Loggerable>
     when(Logger).calledWith('Express-template').mockReturnValue(log)
     // When
     const result = require('../../main/log')

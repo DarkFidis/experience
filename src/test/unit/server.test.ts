@@ -20,9 +20,9 @@ describe('server unit tests', () => {
   })
   test('should create and initialize server', () => {
     // Given
-    const webServer = ({
+    const webServer = {
       init: jest.fn(),
-    } as unknown) as jest.Mocked<WebServerable>
+    } as unknown as jest.Mocked<WebServerable>
     when(WebServer).calledWith(log, registerApp).mockReturnValue(webServer)
     // When
     const result = require('../../main/server')

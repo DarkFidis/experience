@@ -148,7 +148,7 @@ describe('logger unit tests', () => {
           })
           test('should init logger given default config with empty log level', () => {
             // Given
-            const opt = ({ level: '' } as unknown) as Partial<LoggerConfig>
+            const opt = { level: '' } as unknown as Partial<LoggerConfig>
             // When
             const result = log.init(opt)
             // Then
@@ -220,7 +220,7 @@ describe('logger unit tests', () => {
             const result = log.express()
             // Then
             expect(result).toBeTruthy()
-            result((req as unknown) as Request, (res as unknown) as Response, next)
+            result(req as unknown as Request, res as unknown as Response, next)
             expect(next).toHaveBeenCalled()
             expect(onFinished).toHaveBeenCalledWith(res, expect.anything())
             expect(res.get).toHaveBeenCalledWith('content-length')
@@ -244,7 +244,7 @@ describe('logger unit tests', () => {
             const result = log.express()
             // Then
             expect(result).toBeTruthy()
-            result((req as unknown) as Request, (res as unknown) as Response, next)
+            result(req as unknown as Request, res as unknown as Response, next)
             expect(next).toHaveBeenCalled()
             expect(onFinished).toHaveBeenCalledWith(res, expect.anything())
             expect(res.get).not.toHaveBeenCalled()
@@ -270,7 +270,7 @@ describe('logger unit tests', () => {
             const result = log.express()
             // Then
             expect(result).toBeTruthy()
-            result((req as unknown) as Request, (res as unknown) as Response, next)
+            result(req as unknown as Request, res as unknown as Response, next)
             expect(next).toHaveBeenCalled()
             expect(onFinished).toHaveBeenCalledWith(res, expect.anything())
             expect(res.get).toHaveBeenCalledWith('content-length')
@@ -297,7 +297,7 @@ describe('logger unit tests', () => {
             const result = log.express()
             // Then
             expect(result).toBeTruthy()
-            result((req as unknown) as Request, (res as unknown) as Response, next)
+            result(req as unknown as Request, res as unknown as Response, next)
             expect(next).toHaveBeenCalled()
             expect(onFinished).toHaveBeenCalledWith(res, expect.anything())
             expect(res.get).toHaveBeenCalledWith('content-length')
@@ -327,7 +327,7 @@ describe('logger unit tests', () => {
             const result = log.express()
             // Then
             expect(result).toBeTruthy()
-            result((req as unknown) as Request, (res as unknown) as Response, next)
+            result(req as unknown as Request, res as unknown as Response, next)
             expect(next).toHaveBeenCalled()
             expect(onFinished).toHaveBeenCalledWith(res, expect.anything())
             expect(res.get).toHaveBeenCalledWith('content-length')
