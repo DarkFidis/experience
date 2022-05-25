@@ -6,6 +6,5 @@ package/
 tmp/
 .envrc.local
 .gitversion
-.node-version
 *.tgz
 .DS_Store

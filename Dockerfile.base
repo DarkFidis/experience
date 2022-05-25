@@ -1,0 +1,11 @@
+FROM darkfidis/node-npm:18.0.0-8.6.0
+
+WORKDIR /usr/src/app
+
+COPY ./package*.json ./.npmrc ./
+
+RUN npm config set -g production false
+
+RUN npm config set loglevel warn
+
+RUN npm ci --prefer-offline --no-audit --no-optional
