@@ -21,3 +21,17 @@ Ensuite, on peut lancer le conteneur :
 ```shell
 docker run --rm --name <NOM_CONTENEUR> -p 8342:8342 experience
 ```
+
+## Architecture
+
+### Architecture logique
+
+> TO DO : Schema
+
+#### Services
+
+> TO DO
+
+### Système de monitoring
+
+> TO DO
