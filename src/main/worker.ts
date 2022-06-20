@@ -21,7 +21,7 @@ const worker: Workerable = {
         void worker.shutdown(0)
       }
     })
-    await webServer.init()
+    webServer.init()
     await webServer.start()
     log.info(`/!\\ to stop worker : kill -s SIGTERM ${process.pid}`)
   },
