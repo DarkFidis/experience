@@ -1,0 +1,4 @@
+cluster:
+  workers: 0
+log:
+  name: Express-template
