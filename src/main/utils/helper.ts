@@ -17,7 +17,7 @@ const helper: Helperable = {
         if (err) {
           reject(err)
         } else {
-          resolve(value)
+          resolve(value as T)
         }
       })
     }),

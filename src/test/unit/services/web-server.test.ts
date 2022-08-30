@@ -134,7 +134,7 @@ describe('web server unit tests', () => {
           // When
           try {
             await webServer.end()
-          } catch (err) {
+          } catch (err: any) {
             // Then
             expect(err.message).toBe(errorMessage)
             expect(webServer.server).toBeTruthy()
@@ -384,7 +384,7 @@ describe('web server unit tests', () => {
           // When
           try {
             await webServer.run()
-          } catch (err) {
+          } catch (err: any) {
             // Then
             expect(err.message).toBe(error.message)
             expect(fsPromises.unlink).toHaveBeenCalledWith(webServer.config.listen.path)
