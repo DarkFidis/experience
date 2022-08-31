@@ -158,6 +158,10 @@ module.exports = {
         description: 'Lint TypeScript sources',
         script: `eslint ${baseDir} --ext .ts`,
       },
+      fix: {
+        description: 'Fix automatically linting errors',
+        script: `eslint ${baseDir} --fix --ext .ts`,
+      },
       staged: {
         description: 'Lint TypeScript sources',
         script: `lint-staged`,
