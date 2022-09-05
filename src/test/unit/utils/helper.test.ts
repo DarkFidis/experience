@@ -14,7 +14,7 @@ describe('helper unit tests', () => {
       const expectedValue = 'myvalue'
       const promiseFactory = jest.fn()
       promiseFactory.mockResolvedValue(expectedValue)
-      const p = promiseFactory()
+      const p = promiseFactory() as Promise<undefined>
       const cb: Callback<undefined> = jest.fn()
       // When
       helper.asCallback(p, cb)
@@ -29,9 +29,10 @@ describe('helper unit tests', () => {
       const promiseFactory = jest.fn()
       const expectedError = new Error('myerror')
       promiseFactory.mockRejectedValue(expectedError)
+      const p = promiseFactory() as Promise<undefined>
       const cb: Callback<undefined> = jest.fn()
       // When
-      helper.asCallback(promiseFactory(), cb)
+      helper.asCallback(p, cb)
       // Then
       setImmediate(() => {
         expect(cb).toHaveBeenNthCalledWith(1, expectedError)
@@ -103,7 +104,7 @@ describe('helper unit tests', () => {
     })
   })
   describe('toExpressErrorMw', () => {
-    let mockAsCallback
+    let mockAsCallback: jest.SpyInstance
     beforeAll(() => {
       mockAsCallback = jest.spyOn(helper, 'asCallback').mockImplementation()
     })
@@ -133,7 +134,7 @@ describe('helper unit tests', () => {
     })
   })
   describe('toExpressMw', () => {
-    let mockAsCallback
+    let mockAsCallback: jest.SpyInstance
     beforeAll(() => {
       mockAsCallback = jest.spyOn(helper, 'asCallback').mockImplementation()
     })

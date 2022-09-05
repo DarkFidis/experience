@@ -6,7 +6,7 @@ import { WebServerable } from '../../main/types/web-server'
 describe('server unit tests', () => {
   let log: jest.Mocked<Loggerable>
   let registerApp: jest.Mock
-  let WebServer
+  let WebServer: jest.Mock<WebServerable>
   beforeAll(() => {
     jest.doMock('../../main/log')
     ;({ log } = require('../../main/log'))

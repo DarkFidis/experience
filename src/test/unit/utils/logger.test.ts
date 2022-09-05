@@ -43,7 +43,7 @@ describe('logger unit tests', () => {
       const { tokens } = require('../../../main/utils/logger')
       // Then
       expect(tokens).toBeInstanceOf(Object)
-      expect(Object.keys(tokens)).toEqual(['workerId'])
+      expect(Object.keys(tokens as Record<string, unknown>)).toEqual(['workerId'])
       expect(tokens.workerId).toBeInstanceOf(Function)
       expect(tokens.workerId()).toEqual(`worker#${cluster.worker.id}`)
     })

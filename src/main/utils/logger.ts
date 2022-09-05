@@ -88,7 +88,7 @@ class Logger extends TsLogger implements Loggerable {
     }
     if (this.config.appenders) {
       this.appenders.clear()
-      forIn(this.config.appenders, (config, name) => {
+      forIn(this.config.appenders, (config: IAppenderConfiguration, name: string) => {
         this.appenders.set(name, Object.assign({}, config))
       })
     }

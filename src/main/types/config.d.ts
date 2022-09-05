@@ -1,4 +1,4 @@
-import { ClusterConfig } from "./cluster";
+import { ClusterConfig } from './cluster'
 
 export interface LogConfig {
   name: string
