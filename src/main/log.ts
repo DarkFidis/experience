@@ -1,9 +1,7 @@
-import { log as logConfig } from './config'
-import { Loggerable } from './types/logger'
-import { Logger } from './utils/logger'
+import { Logger } from 'winston'
 
-const log: Loggerable = new Logger(logConfig.name)
+import { getLogger } from './utils/logger'
 
-log.init()
+const log: Logger = getLogger('express-template')
 
 export { log }

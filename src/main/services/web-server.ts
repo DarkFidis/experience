@@ -5,11 +5,11 @@ import { createServer as createHttpServer, Server as HttpServer } from 'http'
 import { createServer as createHttpsServer, Server as HttpsServer } from 'https'
 import { isNil, omitBy } from 'lodash'
 import { Socket } from 'net'
+import { Logger } from 'winston'
 
 import { InternalError } from '../errors/internal-error'
 import { errorMw } from '../middlewares/error'
 import { notFound } from '../middlewares/not-found'
-import { Loggerable } from '../types/logger'
 import { RichError } from '../types/middlewares'
 import {
   RegisterApp,
@@ -39,7 +39,7 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
   protected _sockets: Socket[] = []
   protected _serverConnectionHandler?: (socket: Socket) => void
 
-  constructor(log: Loggerable, registerApp?: RegisterApp) {
+  constructor(log: Logger, registerApp?: RegisterApp) {
     super('web-server', log, WebServer.defaultConfig)
     this.registerApp = registerApp
   }
@@ -64,7 +64,7 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
     // Destroy existing client sockets
     if (this._sockets.length) {
       this._sockets.forEach((socket, index) => {
-        this._log.trace('destroying socket #%s', index + 1)
+        this._log.info('destroying socket #%s', index + 1)
         socket.destroy()
       })
     }
@@ -118,9 +118,9 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
     const serverConnectionHandler = (socket: Socket): void => {
       this._sockets.push(socket)
       const socketId = this._sockets.length
-      this._log.trace('new socket (#%s)', socketId)
+      this._log.info('new socket (#%s)', socketId)
       socket.once('close', () => {
-        this._log.trace('socket #%s closed', socketId)
+        this._log.info('socket #%s closed', socketId)
         this._sockets.splice(socketId - 1, 1)
       })
     }
@@ -152,7 +152,6 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
     this.disableEtag(app)
     this.setTrustProxy(app)
     this.registerPoweredByMw(app)
-    this.registerLogMw(app)
     this.registerPingMw(app)
     if (this.registerApp) {
       this.registerApp(app)
@@ -194,13 +193,6 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
         }),
       )
     }
-  }
-
-  public registerLogMw(app: express.Application): void {
-    if (!this.config.log) {
-      return
-    }
-    app.use(this._log.express())
   }
 
   public registerPingMw(app: express.Application): void {

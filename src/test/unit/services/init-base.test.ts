@@ -1,5 +1,6 @@
+import { Logger } from 'winston'
+
 import { InitBase } from '../../../main/services/init-base'
-import { Logger } from '../../../main/utils/logger'
 
 describe('init base unit tests', () => {
   let log: jest.Mocked<Logger>

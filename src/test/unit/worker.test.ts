@@ -1,12 +1,12 @@
 import { when } from 'jest-when'
+import { Logger } from 'winston'
 
-import { Loggerable } from '../../main/types/logger'
 import { WebServerable } from '../../main/types/web-server'
 import { Workerable } from '../../main/types/worker'
 
 describe('worker unit tests', () => {
   let mockProcess: { exit: jest.SpyInstance; on: jest.SpyInstance }
-  let log: jest.Mocked<Loggerable>
+  let log: jest.Mocked<Logger>
   let webServer: jest.Mocked<WebServerable>
   beforeEach(() => {
     mockProcess = {

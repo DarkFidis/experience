@@ -1,12 +1,12 @@
 import { when } from 'jest-when'
+import { Logger } from 'winston'
 
-import { Loggerable } from '../../main/types/logger'
 import { WebServerable } from '../../main/types/web-server'
 
 describe('server unit tests', () => {
-  let log: jest.Mocked<Loggerable>
+  let log: jest.Mocked<Logger>
   let registerApp: jest.Mock
-  let WebServer
+  let WebServer: jest.Mock<WebServerable>
   beforeAll(() => {
     jest.doMock('../../main/log')
     ;({ log } = require('../../main/log'))

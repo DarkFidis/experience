@@ -1,4 +1,5 @@
 import { Callback, Helperable } from '../types/helper'
+import { RichError } from '../types/middlewares'
 
 const helper: Helperable = {
   asCallback: (promise, cb) => {
@@ -30,10 +31,11 @@ const helper: Helperable = {
   },
   staticImplements:
     <T>() =>
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     (__: T) => {},
   toExpressErrorMw:
     (errorHandler) =>
-    (err, req, res, next): void => {
+    (err: RichError, req, res, next): void => {
       helper.asCallback<void>(
         Promise.resolve().then(() => errorHandler(err, req, res)),
         next,

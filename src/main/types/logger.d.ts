@@ -1,22 +1,37 @@
-import { RequestHandler } from 'express'
-import { IAppenderConfiguration, IBasicLayoutConfiguration, Logger as TsLogger } from 'ts-log-debug'
-
-import { Mapable } from './basic-types'
-import { Initializable } from './service'
-
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+import { FormatWrap } from 'logform'
+import { Logger } from 'winston'
 
 export interface LoggerConfig {
-  appenders?: Mapable<IAppenderConfiguration>
-  layout?: IBasicLayoutConfiguration
-  level: LogLevel
+  level: string
 }
 
-export interface StaticLoggerable {
-  defaultLoggerConfig: LoggerConfig
-  new (name?: string): Loggerable
+export interface LogFormater {
+  addCustomKeys(appName: string): FormatWrap
+  keyToUpperCase(key: string): FormatWrap
+  removeKeys(keys: string[]): FormatWrap
 }
-export interface Loggerable extends TsLogger, Initializable<LoggerConfig> {
-  express(): RequestHandler
-  log(...args: unknown[]): void
+
+export type GetLogger = (appName: string) => Logger
+
+export interface MockedWinston {
+  config: {
+    syslog: {
+      levels: {
+        info: number
+      }
+    }
+  }
+  createLogger: jest.Mock
+  format: {
+    colorize: jest.Mock
+    combine: jest.Mock
+    json: jest.Mock
+    label: jest.Mock
+    printf: jest.Mock
+    splat: jest.Mock
+    timestamp: jest.Mock
+  }
+  transports: {
+    Console: jest.Mock
+  }
 }

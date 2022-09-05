@@ -1,4 +1,5 @@
-import { Loggerable } from '../types/logger'
+import { Logger } from 'winston'
+
 import { Serviceable, ServiceStateable } from '../types/service'
 import { InitBase } from './init-base'
 
@@ -8,7 +9,7 @@ abstract class ServiceBase<T> extends InitBase<T> implements Serviceable<T> {
     stopping: false,
   }
 
-  protected constructor(name: string, log: Loggerable, defaultConfig?: T) {
+  protected constructor(name: string, log: Logger, defaultConfig?: T) {
     super(name, log, defaultConfig)
   }
 
@@ -43,9 +44,9 @@ abstract class ServiceBase<T> extends InitBase<T> implements Serviceable<T> {
   public async stop(): Promise<boolean> {
     if (!this.state.started || this.state.stopping) {
       if (this.state.stopping) {
-        this._log.warn(`service ${this.name} is already stopping : ignore`)
+        this._log.warning(`service ${this.name} is already stopping : ignore`)
       } else {
-        this._log.warn(`service ${this.name} is not started : ignore`)
+        this._log.warning(`service ${this.name} is not started : ignore`)
       }
       return false
     }

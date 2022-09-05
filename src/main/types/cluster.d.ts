@@ -1,6 +1,5 @@
 import { ClusterSettings } from 'cluster'
-
-import { Loggerable } from './logger'
+import { Logger } from 'winston'
 
 export interface ClusterConfig {
   settings?: ClusterSettings
@@ -9,7 +8,7 @@ export interface ClusterConfig {
   workers?: number
 }
 
-export type StaticClusterable = new (log: Loggerable) => Clusterable
+export type StaticClusterable = new (log: Logger) => Clusterable
 
 export interface Clusterable {
   clusterize(fn: () => Promise<void>, clusterConfig: ClusterConfig): void

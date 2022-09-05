@@ -1,2 +1,2 @@
-cluster:
-  workers: 0
+log:
+  level: off
