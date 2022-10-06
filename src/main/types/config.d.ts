@@ -5,7 +5,14 @@ export interface LogConfig {
   name: string
 }
 
+export interface DbConfig {
+  dbName: string
+  host: string
+  logging: boolean
+}
+
 export interface Config {
   cluster: ClusterConfig
   log: LogConfig
+  postgres: DbConfig
 }

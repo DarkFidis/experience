@@ -1,6 +1,7 @@
 import { when } from 'jest-when'
 import { Logger } from 'winston'
 
+import { PgClientable } from '../../main/types/pg'
 import { WebServerable } from '../../main/types/web-server'
 import { Workerable } from '../../main/types/worker'
 
@@ -8,6 +9,7 @@ describe('worker unit tests', () => {
   let mockProcess: { exit: jest.SpyInstance; on: jest.SpyInstance }
   let log: jest.Mocked<Logger>
   let webServer: jest.Mocked<WebServerable>
+  let pgClient: jest.Mocked<PgClientable>
   beforeEach(() => {
     mockProcess = {
       exit: jest.spyOn(process, 'exit'),
@@ -33,6 +35,8 @@ describe('worker unit tests', () => {
       jest.doMock('../../main/services/web-server')
       jest.doMock('../../main/server')
       ;({ webServer } = require('../../main/server'))
+      jest.doMock('../../main/postgres')
+      ;({ pgClient } = require('../../main/postgres'))
       worker = require('../../main/worker')
     })
     describe('handleSignal', () => {
@@ -70,7 +74,8 @@ describe('worker unit tests', () => {
         expect(handleSignalSpy).toHaveBeenCalledTimes(2)
         expect(handleSignalSpy).toHaveBeenCalledWith('SIGINT')
         expect(handleSignalSpy).toHaveBeenCalledWith('SIGTERM')
-        expect(webServer.start).toHaveBeenNthCalledWith(1)
+        expect(pgClient.start).toHaveBeenCalled()
+        expect(webServer.start).toHaveBeenCalled()
       })
       test('should start app server given log level is debug', async () => {
         // Given
@@ -81,7 +86,8 @@ describe('worker unit tests', () => {
         expect(handleSignalSpy).toHaveBeenCalledTimes(2)
         expect(handleSignalSpy).toHaveBeenCalledWith('SIGINT')
         expect(handleSignalSpy).toHaveBeenCalledWith('SIGTERM')
-        expect(webServer.start).toHaveBeenNthCalledWith(1)
+        expect(pgClient.start).toHaveBeenCalled()
+        expect(webServer.start).toHaveBeenCalled()
       })
       test('should shutdown given shutdown message is received', async () => {
         // Given
@@ -111,14 +117,16 @@ describe('worker unit tests', () => {
         // When
         await worker.shutdown(0)
         // Then
-        expect(webServer.stop).toHaveBeenNthCalledWith(1)
+        expect(webServer.stop).toHaveBeenCalled()
+        expect(pgClient.stop).toHaveBeenCalled()
         expect(mockProcess.exit).toHaveBeenNthCalledWith(1, 0)
       })
       test('should shutdown and exit with code 1', async () => {
         // When
         await worker.shutdown()
         // Then
-        expect(webServer.stop).toHaveBeenNthCalledWith(1)
+        expect(webServer.stop).toHaveBeenCalled()
+        expect(pgClient.stop).toHaveBeenCalled()
         expect(mockProcess.exit).toHaveBeenNthCalledWith(1, 1)
       })
       test('should shutdown and exit with code 1 given web server stop failed', async () => {
@@ -128,52 +136,8 @@ describe('worker unit tests', () => {
         // When
         await worker.shutdown(0)
         // Then
-        expect(webServer.stop).toHaveBeenNthCalledWith(1)
-        expect(mockProcess.exit).toHaveBeenNthCalledWith(1, 1)
-      })
-    })
-  })
-  describe('system monitor disabled', () => {
-    let worker: Workerable
-    beforeAll(() => {
-      jest.resetModules()
-      jest.doMock('../../main/log')
-      ;({ log } = require('../../main/log'))
-      jest.doMock('../../main/services/web-server')
-      jest.doMock('../../main/server')
-      ;({ webServer } = require('../../main/server'))
-      worker = require('../../main/worker')
-    })
-    describe('run', () => {
-      let handleSignalSpy: jest.SpyInstance
-      let processOnMock: jest.SpyInstance
-      let shutdownMock: jest.SpyInstance
-      beforeAll(() => {
-        handleSignalSpy = jest.spyOn(worker, 'handleSignal').mockImplementation()
-        processOnMock = jest.spyOn(process, 'on').mockImplementation()
-        shutdownMock = jest.spyOn(worker, 'shutdown').mockImplementation(() => Promise.resolve())
-      })
-      afterAll(() => {
-        shutdownMock.mockRestore()
-        processOnMock.mockRestore()
-        handleSignalSpy.mockRestore()
-      })
-      test('should ignore system monitor given it is disabled', async () => {
-        // When
-        await worker.run()
-        // Then
-        expect(handleSignalSpy).toHaveBeenCalledTimes(2)
-        expect(handleSignalSpy).toHaveBeenCalledWith('SIGINT')
-        expect(handleSignalSpy).toHaveBeenCalledWith('SIGTERM')
-        expect(webServer.start).toHaveBeenNthCalledWith(1)
-      })
-    })
-    describe('shutdown', () => {
-      test('should ignore system monitor given it is disabled', async () => {
-        // When
-        await worker.shutdown()
-        // Then
-        expect(webServer.stop).toHaveBeenNthCalledWith(1)
+        expect(webServer.stop).toHaveBeenCalled()
+        expect(pgClient.stop).not.toHaveBeenCalled()
         expect(mockProcess.exit).toHaveBeenNthCalledWith(1, 1)
       })
     })

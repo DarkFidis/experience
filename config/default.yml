@@ -2,3 +2,7 @@ cluster:
   workers: 0
 log:
   name: Express-template
+postgres:
+  dbName: express-template
+  host: localhost
+  logging: false

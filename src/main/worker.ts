@@ -1,4 +1,5 @@
 import { log } from './log'
+import { pgClient } from './postgres'
 import { webServer } from './server'
 import { Workerable } from './types/worker'
 
@@ -22,12 +23,14 @@ const worker: Workerable = {
       }
     })
     webServer.init()
+    await pgClient.start()
     await webServer.start()
     log.info(`/!\\ to stop worker : kill -s SIGTERM ${process.pid}`)
   },
   shutdown: async (exitCode = 1) => {
     try {
       await webServer.stop()
+      await pgClient.stop()
       process.exit(exitCode)
     } catch (err) {
       log.error(err)
