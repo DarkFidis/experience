@@ -1,5 +1,7 @@
 import { when } from 'jest-when'
+import { Repository } from 'typeorm'
 
+import { User } from '../../../../main/db/entities/User'
 import { UserModel } from '../../../../main/db/models/user.model'
 
 describe('User model unit tests', () => {
@@ -11,7 +13,7 @@ describe('User model unit tests', () => {
     remove: jest.fn(),
     save: jest.fn(),
     update: jest.fn(),
-  }
+  } as unknown as Repository<User>
   describe('instance', () => {
     beforeEach(() => {
       userModel = new UserModel(entityMock)

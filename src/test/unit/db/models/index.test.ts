@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 import { PgClientable } from '../../../../main/types/pg'
 
 describe('Models index', () => {
-  let UserModel
+  let UserModel: jest.Mock
   let pgClient: jest.Mocked<PgClientable>
   let User: jest.Mock
   beforeAll(() => {

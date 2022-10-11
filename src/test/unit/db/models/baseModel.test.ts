@@ -1,4 +1,5 @@
 import { when } from 'jest-when'
+import { Repository } from 'typeorm'
 
 import { BaseModel } from '../../../../main/db/models/baseModel'
 import { NotFoundError } from '../../../../main/errors/not-found-error'
@@ -11,9 +12,9 @@ describe('baseModel', () => {
     remove: jest.fn(),
     save: jest.fn(),
     update: jest.fn(),
-  }
-  class MyBaseModel extends BaseModel {
-    constructor(entity: any) {
+  } as unknown as Repository<any>
+  class MyBaseModel extends BaseModel<any> {
+    constructor(entity: Repository<any>) {
       super(entity)
     }
   }
@@ -34,7 +35,9 @@ describe('baseModel', () => {
             foo: 'bar',
           },
         ]
-        when(entityMock.find).calledWith().mockResolvedValue(expectedResult)
+        when(entityMock.find as jest.Mock)
+          .calledWith()
+          .mockResolvedValue(expectedResult)
         // When
         const result = await myBaseModel.getAll()
         // Then
@@ -52,7 +55,9 @@ describe('baseModel', () => {
             foo: 'bar',
           },
         ]
-        when(entityMock.findOneBy).calledWith({ id }).mockResolvedValue(expectedResult)
+        when(entityMock.findOneBy as jest.Mock)
+          .calledWith({ id })
+          .mockResolvedValue(expectedResult)
         // When
         const result = await myBaseModel.getById(id)
         // Then
@@ -72,7 +77,9 @@ describe('baseModel', () => {
             foo: 'bar',
           },
         ]
-        when(entityMock.findOneBy).calledWith(options).mockResolvedValue(expectedResult)
+        when(entityMock.findOneBy as jest.Mock)
+          .calledWith(options)
+          .mockResolvedValue(expectedResult)
         // When
         const result = await myBaseModel.getOneByOptions(options)
         // Then
@@ -95,8 +102,12 @@ describe('baseModel', () => {
           id: 1,
           lastName: 'Doe',
         }
-        when(entityMock.create).calledWith(input).mockReturnValue(entityFromInput)
-        when(entityMock.save).calledWith(entityFromInput).mockResolvedValue(entityFromInput)
+        when(entityMock.create as jest.Mock)
+          .calledWith(input)
+          .mockReturnValue(entityFromInput)
+        when(entityMock.save as jest.Mock)
+          .calledWith(entityFromInput)
+          .mockResolvedValue(entityFromInput)
         // When
         const result = await myBaseModel.create(input)
         // Then
@@ -182,7 +193,9 @@ describe('baseModel', () => {
           lastName: 'Doe',
         }
         when(getByIdSpy).calledWith(id).mockResolvedValue(entity)
-        when(entityMock.remove).calledWith(entity).mockResolvedValue(entity)
+        when(entityMock.remove as jest.Mock)
+          .calledWith(entity)
+          .mockResolvedValue(entity)
         // When
         const result = await myBaseModel.deleteById(id)
         // Then

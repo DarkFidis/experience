@@ -1,9 +1,11 @@
+import { Repository } from 'typeorm'
+
 import { NotFoundError } from '../../errors/not-found-error'
 import { BaseModelable } from '../../types/models'
 
-abstract class BaseModel implements BaseModelable {
+abstract class BaseModel<Entity> implements BaseModelable<Entity> {
   protected _model: any
-  protected constructor(entity: any) {
+  protected constructor(entity: Repository<Entity>) {
     this._model = entity
   }
 
@@ -23,13 +25,13 @@ abstract class BaseModel implements BaseModelable {
     return this.model.findOneBy(options)
   }
 
-  public async create(input: any) {
+  public async create(input) {
     const entity = this.model.create(input)
     return this.model.save(entity)
   }
 
-  public async update(input: any) {
-    const entityToUpdate = await this.getById(input.id)
+  public async update(input) {
+    const entityToUpdate = await this.getById(input.id as number)
     if (!entityToUpdate) {
       throw new NotFoundError('Entity not found')
     }

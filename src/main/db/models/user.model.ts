@@ -1,7 +1,10 @@
+import { Repository } from 'typeorm'
+
+import { User } from '../entities/User'
 import { BaseModel } from './baseModel'
 
-export class UserModel extends BaseModel {
-  constructor(entity: any) {
+export class UserModel extends BaseModel<User> {
+  constructor(entity: Repository<User>) {
     super(entity)
   }
 
