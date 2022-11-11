@@ -1,6 +1,7 @@
 import { ClusterConfig } from './cluster'
 
 export interface LogConfig {
+  level: string
   name: string
 }
 

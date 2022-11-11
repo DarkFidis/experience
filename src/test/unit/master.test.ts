@@ -1,9 +1,10 @@
+import { Logger } from 'winston'
+
 import { cluster as clusterConfig } from '../../main/config'
-import { Loggerable } from '../../main/types/logger'
 
 describe('master unit tests', () => {
   let Cluster: jest.Mock
-  let log: jest.Mocked<Loggerable>
+  let log: jest.Mocked<Logger>
   let runWorker: jest.Mock
   let run: jest.Mock
   let spyClusterConstructor: jest.SpyInstance

@@ -11,18 +11,18 @@ import {
 import { openSync } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { cpus } from 'os'
+import { Logger } from 'winston'
 
 import { Clusterable, ClusterConfig, StaticClusterable } from '../types/cluster'
-import { Loggerable } from '../types/logger'
 import { repeat, staticImplements } from './helper'
 
 const defaultWorkers = cpus().length
 
 @staticImplements<StaticClusterable>()
 class Cluster implements Clusterable {
-  protected _log: Loggerable
+  protected _log: Logger
 
-  constructor(log: Loggerable) {
+  constructor(log: Logger) {
     this._log = log
   }
 
@@ -54,22 +54,22 @@ class Cluster implements Clusterable {
     clusterOn('fork', (worker: Worker) => {
       const id = worker.id
       const pid = worker.process.pid
-      log.warn(`worker #${id} (pid:${pid}) forked`)
+      log.warning(`worker #${id} (pid:${pid}) forked`)
     })
     clusterOn('online', (worker: Worker) => {
       const id = worker.id
       const pid = worker.process.pid
-      log.warn(`worker #${id} (pid:${pid}) is online`)
+      log.warning(`worker #${id} (pid:${pid}) is online`)
     })
     clusterOn('listening', (worker: Worker, address: Address) => {
       const id = worker.id
       const pid = worker.process.pid
-      log.warn(`worker #${id} (pid:${pid}) is listening to port ${address.port}`)
+      log.warning(`worker #${id} (pid:${pid}) is listening to port ${address.port}`)
     })
     clusterOn('exit', (worker: Worker, code: number) => {
       const workerId = worker.id
       const pid = worker.process.pid
-      log.warn(`worker #${workerId} (pid:${pid}) died with code: ${code}`)
+      log.warning(`worker #${workerId} (pid:${pid}) died with code: ${code}`)
       if (code !== 0) {
         this.launchWorker(noWorkers)
       }
@@ -79,12 +79,12 @@ class Cluster implements Clusterable {
         this.launchWorker(noWorkers)
       }, index * 3000)
     })
-    log.warn(`/!\\ to reload workers : kill -s SIGUSR2 ${process.pid}`)
+    log.warning(`/!\\ to reload workers : kill -s SIGUSR2 ${process.pid}`)
   }
 
   public launchWorker(workersCount: number): void {
     const log = this._log
-    log.warn('launching a new worker...')
+    log.warning('launching a new worker...')
     fork({ CLUSTER_WORKERS: workersCount })
   }
 

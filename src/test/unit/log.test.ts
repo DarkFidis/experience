@@ -1,13 +1,13 @@
 import { when } from 'jest-when'
+import { Logger } from 'winston'
 
 import { log as logConfig } from '../../main/config'
-import { Loggerable } from '../../main/types/logger'
 
 describe('log unit tests', () => {
-  let Logger: jest.Mock
+  let getLogger: jest.Mock
   beforeAll(() => {
     jest.doMock('../../main/utils/logger')
-    ;({ Logger } = require('../../main/utils/logger'))
+    ;({ getLogger } = require('../../main/utils/logger'))
   })
   afterAll(() => {
     jest.restoreAllMocks()
@@ -16,13 +16,12 @@ describe('log unit tests', () => {
     // Given
     const log = {
       init: jest.fn(),
-    } as unknown as jest.Mocked<Loggerable>
-    when(Logger).calledWith('Express-template').mockReturnValue(log)
+    } as unknown as jest.Mocked<Logger>
+    when(getLogger).calledWith(logConfig.name).mockReturnValue(log)
     // When
     const result = require('../../main/log')
     // Then
-    expect(Logger).toHaveBeenNthCalledWith(1, logConfig.name)
-    expect(log.init).toHaveBeenCalledTimes(1)
+    expect(getLogger).toHaveBeenNthCalledWith(1, logConfig.name)
     expect(result).toHaveProperty('log', log)
   })
 })

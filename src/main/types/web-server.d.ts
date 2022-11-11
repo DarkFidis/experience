@@ -2,8 +2,8 @@ import * as express from 'express'
 import { Server as HttpServer } from 'http'
 import { Server as HttpsServer } from 'https'
 import { ServerOptions } from 'https'
+import { Logger } from 'winston'
 
-import { Loggerable } from './logger'
 import { Serviceable } from './service'
 
 export interface WebServerConfig {
@@ -42,7 +42,7 @@ export type RegisterApp = (app: express.Application) => void
 export interface StaticWebServerable {
   defaultConfig: WebServerConfig
 
-  new (log: Loggerable, registerApp?: RegisterApp): WebServerable
+  new (log: Logger, registerApp?: RegisterApp): WebServerable
 }
 
 export interface WebServerable extends Serviceable<WebServerConfig> {
@@ -52,9 +52,7 @@ export interface WebServerable extends Serviceable<WebServerConfig> {
   readonly startedAt?: string
   registerApp?: RegisterApp
   disableEtag(app: express.Application): void
-  registerLogMw(app: express.Application): void
   registerMw(app: express.Application): void
   registerPingMw(app: express.Application): void
-  registerPoweredByMw(app: express.Application): void
   setTrustProxy(app: express.Application): void
 }

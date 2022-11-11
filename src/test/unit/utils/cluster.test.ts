@@ -1,11 +1,12 @@
+import { Logger } from 'winston'
+
 import { Clusterable, ClusterConfig } from '../../../main/types/cluster'
-import { Loggerable } from '../../../main/types/logger'
 import { repeat } from '../../../main/utils/helper'
 
 describe('cluster unit tests', () => {
   const cpusLength = 2
   describe('Cluster', () => {
-    let log: jest.Mocked<Loggerable>
+    let log: jest.Mocked<Logger>
     let nodeCluster: {
       Worker: jest.Mock
       fork: jest.Mock

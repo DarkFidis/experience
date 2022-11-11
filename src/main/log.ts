@@ -1,9 +1,8 @@
+import { Logger } from 'winston'
+
 import { log as logConfig } from './config'
-import { Loggerable } from './types/logger'
-import { Logger } from './utils/logger'
+import { getLogger } from './utils/logger'
 
-const log: Loggerable = new Logger(logConfig.name)
-
-log.init()
+const log: Logger = getLogger(logConfig.name)
 
 export { log }

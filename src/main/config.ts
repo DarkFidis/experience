@@ -8,4 +8,4 @@ export const cluster = nodeConfig.has('cluster')
 
 export const log = nodeConfig.has('log')
   ? nodeConfig.get<Config['log']>('log')
-  : { name: 'Express-template' }
+  : { level: 'debug', name: 'Express-template' }

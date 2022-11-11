@@ -15,7 +15,7 @@ describe('Config file unit tests', () => {
     const clusterConfig = { workers: 0 }
     when(nodeConfig.has).calledWith('cluster').mockReturnValue(true)
     when(nodeConfig.get).calledWith('cluster').mockReturnValue(clusterConfig)
-    const logConfig = { name: 'Express-template' }
+    const logConfig = { level: 'debug', name: 'Express-template' }
     when(nodeConfig.has).calledWith('log').mockReturnValue(true)
     when(nodeConfig.get).calledWith('log').mockReturnValue(logConfig)
     // When
@@ -31,7 +31,7 @@ describe('Config file unit tests', () => {
   it('should retrieve all default config options', () => {
     // Given
     const clusterConfig = { workers: 0 }
-    const logConfig = { name: 'Express-template' }
+    const logConfig = { level: 'debug', name: 'Express-template' }
     when(nodeConfig.has).calledWith('cluster').mockReturnValue(false)
     when(nodeConfig.has).calledWith('log').mockReturnValue(false)
     // When

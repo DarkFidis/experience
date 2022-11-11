@@ -1,12 +1,11 @@
 import { ErrorRequestHandler, RequestHandler } from 'express'
-import { Request, Response } from 'express'
 import { ServerOptions } from 'https'
 import { when } from 'jest-when'
 import { noop } from 'lodash'
+import { Logger } from 'winston'
 
 import { ServiceBase } from '../../../main/services/service-base'
 import { Optional } from '../../../main/types/basic-types'
-import { Loggerable } from '../../../main/types/logger'
 import { StaticWebServerable, WebServerConfig } from '../../../main/types/web-server'
 
 const jestExpress = require('jest-express')
@@ -22,12 +21,11 @@ describe('web server unit tests', () => {
   let express: jest.Mocked<typeof jestExpress>
   let Socket: jest.Mock
   let fsPromises: { unlink: jest.Mock }
-  let log: jest.Mocked<Loggerable>
+  let log: jest.Mocked<Logger>
   let InternalError: jest.Mock
   let errorMw: jest.Mocked<ErrorRequestHandler>
   let notFound: jest.Mocked<RequestHandler>
   let toExpressErrorMw: jest.SpyInstance
-  let toExpressMw: jest.SpyInstance
   let WebServer: StaticWebServerable
   beforeAll(() => {
     jest.doMock('../../../main/log')
@@ -57,7 +55,6 @@ describe('web server unit tests', () => {
     ;({ notFound } = require('../../../main/middlewares/not-found'))
     const helper = require('../../../main/utils/helper')
     toExpressErrorMw = jest.spyOn(helper, 'toExpressErrorMw').mockImplementation(noop)
-    toExpressMw = jest.spyOn(helper, 'toExpressMw').mockImplementation(noop)
     ;({ WebServer } = require('../../../main/services/web-server'))
   })
   describe('WebServer', () => {
@@ -66,7 +63,7 @@ describe('web server unit tests', () => {
       expect(WebServer.defaultConfig).toEqual({
         gitVersion: true,
         listen: {
-          port: 8342,
+          port: 5000,
         },
         log: true,
         ping: true,
@@ -477,16 +474,12 @@ describe('web server unit tests', () => {
       describe('registerMw', () => {
         let app
         let disableEtag
-        let registerPoweredByMw
         let setTrustProxy
-        let registerLogMw
         let registerPingMw
         beforeAll(() => {
           app = express()
           disableEtag = jest.spyOn(webServer, 'disableEtag').mockImplementation()
           setTrustProxy = jest.spyOn(webServer, 'setTrustProxy').mockImplementation()
-          registerPoweredByMw = jest.spyOn(webServer, 'registerPoweredByMw').mockImplementation()
-          registerLogMw = jest.spyOn(webServer, 'registerLogMw').mockImplementation()
           registerPingMw = jest.spyOn(webServer, 'registerPingMw').mockImplementation()
         })
         beforeEach(() => {
@@ -495,14 +488,10 @@ describe('web server unit tests', () => {
         afterAll(() => {
           disableEtag.mockRestore()
           setTrustProxy.mockRestore()
-          registerPoweredByMw.mockRestore()
-          registerLogMw.mockRestore()
           registerPingMw.mockRestore()
         })
         test('should register middlewares', () => {
           // Given
-          const logExpressMw: RequestHandler = 'log-express' as unknown as RequestHandler
-          log.express.mockImplementation(() => logExpressMw)
           const errorExpressMw = jest.fn()
           when(toExpressErrorMw).calledWith(errorMw).mockReturnValue(errorExpressMw)
           // When
@@ -510,8 +499,6 @@ describe('web server unit tests', () => {
           // Then
           expect(disableEtag).toHaveBeenCalledWith(app)
           expect(setTrustProxy).toHaveBeenCalledWith(app)
-          expect(registerPoweredByMw).toHaveBeenCalledWith(app)
-          expect(registerLogMw).toHaveBeenCalledWith(app)
           expect(registerPingMw).toHaveBeenCalledWith(app)
           expect(app.use).toHaveBeenCalledWith(notFound)
           expect(toExpressErrorMw).toHaveBeenCalledWith(errorMw)
@@ -520,8 +507,6 @@ describe('web server unit tests', () => {
         test('should register middlewares given registerAppMw is defined', () => {
           // Given
           webServer.registerApp = jest.fn()
-          const logExpressMw: RequestHandler = 'log-express' as unknown as RequestHandler
-          log.express.mockImplementation(() => logExpressMw)
           const errorExpressMw = jest.fn()
           when(toExpressErrorMw).calledWith(errorMw).mockReturnValue(errorExpressMw)
           // When
@@ -529,8 +514,6 @@ describe('web server unit tests', () => {
           // Then
           expect(disableEtag).toHaveBeenCalledWith(app)
           expect(setTrustProxy).toHaveBeenCalledWith(app)
-          expect(registerPoweredByMw).toHaveBeenCalledWith(app)
-          expect(registerLogMw).toHaveBeenCalledWith(app)
           expect(registerPingMw).toHaveBeenCalledWith(app)
           expect(webServer.registerApp).toHaveBeenCalledWith(app)
           expect(app.use).toHaveBeenCalledWith(notFound)
@@ -576,131 +559,6 @@ describe('web server unit tests', () => {
           webServer.setTrustProxy(app)
           // Then
           expect(app.set).not.toHaveBeenCalledWith('trust proxy', expect.any)
-        })
-      })
-      describe('registerPoweredByMw', () => {
-        beforeEach(() => {
-          toExpressMw.mockReset()
-        })
-        test('should set custom powered by header', () => {
-          // Given
-          webServer._config = { poweredBy: 'mypowered' }
-          const app = express()
-          const expressMw = jest.fn()
-          when(toExpressMw)
-            .calledWith(expect.any(Function))
-            .mockImplementation((handler) => {
-              const req = {} as Request
-              const res = { setHeader: jest.fn() } as unknown as Response
-              handler(req, res)
-              expect(res.setHeader).toHaveBeenCalledWith('x-powered-by', 'mypowered')
-              return expressMw
-            })
-          // When
-          webServer.registerPoweredByMw(app)
-          // Then
-          expect(app.disable).toHaveBeenCalledWith('x-powered-by')
-          expect(toExpressMw).toHaveBeenCalledWith(expect.any(Function))
-          expect(app.use).toHaveBeenCalledWith(expressMw)
-        })
-        test('should use default powered by given poweredBy is true in config', () => {
-          // Given
-          webServer._config = { poweredBy: true }
-          const app = express()
-          // When
-          webServer.registerPoweredByMw(app)
-          // Then
-          expect(app.disable).not.toHaveBeenCalled()
-          expect(app.use).not.toHaveBeenCalled()
-        })
-        test('should disable powered by header given poweredBy is false in config', () => {
-          // Given
-          webServer._config = { poweredBy: false }
-          const app = express()
-          // When
-          webServer.registerPoweredByMw(app)
-          // Then
-          expect(app.disable).toHaveBeenCalledWith('x-powered-by')
-          expect(app.use).not.toHaveBeenCalled()
-        })
-        test('should use default powered by given poweredBy is undefined in config', () => {
-          // Given
-          cluster.worker = { id: 'myWorkerId' }
-          webServer._config = {
-            name: 'web-server',
-            poweredBy: undefined,
-            version: '1.0.0',
-          }
-          const app = express()
-          const expressMw = jest.fn()
-          when(toExpressMw)
-            .calledWith(expect.any(Function))
-            .mockImplementation((handler) => {
-              const req = {} as Request
-              const res = { setHeader: jest.fn() } as unknown as Response
-              handler(req, res)
-              expect(res.setHeader).toHaveBeenCalledWith(
-                'x-powered-by',
-                'web-server@1.0.0 #myWorkerId',
-              )
-              return expressMw
-            })
-          // When
-          webServer.registerPoweredByMw(app)
-          // Then
-          expect(app.disable).toHaveBeenCalledWith('x-powered-by')
-          expect(toExpressMw).toHaveBeenCalledWith(expect.any(Function))
-          expect(app.use).toHaveBeenCalledWith(expressMw)
-        })
-        test('should use default powered by given no worker id', () => {
-          // Given
-          cluster.worker = undefined
-          webServer._config = {
-            name: 'web-server',
-            poweredBy: undefined,
-            version: '1.0.0',
-          }
-          const app = express()
-          const expressMw = jest.fn()
-          when(toExpressMw)
-            .calledWith(expect.any(Function))
-            .mockImplementation((handler) => {
-              const req = {} as Request
-              const res = { setHeader: jest.fn() } as unknown as Response
-              handler(req, res)
-              expect(res.setHeader).toHaveBeenCalledWith('x-powered-by', 'web-server@1.0.0')
-              return expressMw
-            })
-          // When
-          webServer.registerPoweredByMw(app)
-          // Then
-          expect(app.disable).toHaveBeenCalledWith('x-powered-by')
-          expect(toExpressMw).toHaveBeenCalledWith(expect.any(Function))
-          expect(app.use).toHaveBeenCalledWith(expressMw)
-        })
-      })
-      describe('registerLogMw', () => {
-        test('should register log mw', () => {
-          // Given
-          webServer._config = { log: true }
-          const app = express()
-          const logExpressMw = jest.fn()
-          when(log.express).calledWith().mockReturnValue(logExpressMw)
-          // When
-          webServer.registerLogMw(app)
-          // Then
-          expect(log.express).toHaveBeenCalledWith()
-          expect(app.use).toHaveBeenCalledWith(logExpressMw)
-        })
-        test('should not register log middleware given log is false in config', () => {
-          // Given
-          webServer._config = { log: false }
-          const app = express()
-          // When
-          webServer.registerLogMw(app)
-          // Then
-          expect(log.express).not.toHaveBeenCalled()
-          expect(app.use).not.toHaveBeenCalled()
         })
       })
       describe('registerPingMw', () => {
