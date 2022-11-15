@@ -23,6 +23,7 @@ describe('web server unit tests', () => {
   let fsPromises: { unlink: jest.Mock }
   let log: jest.Mocked<Logger>
   let InternalError: jest.Mock
+  let logMwFactory: jest.Mock
   let errorMw: jest.Mocked<ErrorRequestHandler>
   let notFound: jest.Mocked<RequestHandler>
   let toExpressErrorMw: jest.SpyInstance
@@ -49,6 +50,8 @@ describe('web server unit tests', () => {
     fsPromises = fs.promises
     jest.doMock('../../../main/errors/internal-error')
     ;({ InternalError } = require('../../../main/errors/internal-error'))
+    jest.doMock('../../../main/middlewares/log')
+    ;({ logMwFactory } = require('../../../main/middlewares/log'))
     jest.doMock('../../../main/middlewares/error')
     ;({ errorMw } = require('../../../main/middlewares/error'))
     jest.doMock('../../../main/middlewares/not-found')
@@ -476,11 +479,13 @@ describe('web server unit tests', () => {
         let disableEtag
         let setTrustProxy
         let registerPingMw
+        let registerLogMw
         beforeAll(() => {
           app = express()
           disableEtag = jest.spyOn(webServer, 'disableEtag').mockImplementation()
           setTrustProxy = jest.spyOn(webServer, 'setTrustProxy').mockImplementation()
           registerPingMw = jest.spyOn(webServer, 'registerPingMw').mockImplementation()
+          registerLogMw = jest.spyOn(webServer, 'registerLogMw').mockImplementation()
         })
         beforeEach(() => {
           delete webServer.registerAppMw
@@ -489,6 +494,7 @@ describe('web server unit tests', () => {
           disableEtag.mockRestore()
           setTrustProxy.mockRestore()
           registerPingMw.mockRestore()
+          registerLogMw.mockRestore()
         })
         test('should register middlewares', () => {
           // Given
@@ -512,6 +518,7 @@ describe('web server unit tests', () => {
           // When
           webServer.registerMw(app)
           // Then
+          expect(registerLogMw).toHaveBeenCalledWith(app)
           expect(disableEtag).toHaveBeenCalledWith(app)
           expect(setTrustProxy).toHaveBeenCalledWith(app)
           expect(registerPingMw).toHaveBeenCalledWith(app)
@@ -519,6 +526,19 @@ describe('web server unit tests', () => {
           expect(app.use).toHaveBeenCalledWith(notFound)
           expect(toExpressErrorMw).toHaveBeenCalledWith(errorMw)
           expect(app.use).toHaveBeenCalledWith(errorExpressMw)
+        })
+      })
+      describe('registerLogMw', () => {
+        test('should register log middleware', () => {
+          // Given
+          const app = express()
+          const logMw = jest.fn()
+          when(logMwFactory).calledWith(log).mockReturnValue(logMw)
+          // When
+          webServer.registerLogMw(app)
+          // Then
+          expect(logMwFactory).toHaveBeenCalledWith(log)
+          expect(app.use).toHaveBeenCalledWith(logMw)
         })
       })
       describe('disableEtag', () => {

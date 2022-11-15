@@ -54,5 +54,6 @@ export interface WebServerable extends Serviceable<WebServerConfig> {
   disableEtag(app: express.Application): void
   registerMw(app: express.Application): void
   registerPingMw(app: express.Application): void
+  registerLogMw(app: express.Application): void
   setTrustProxy(app: express.Application): void
 }

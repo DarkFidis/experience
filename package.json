@@ -55,6 +55,7 @@
     "config": "3.3.7",
     "cookie-parser": "1.4.6",
     "express": "4.17.1",
+    "on-finished": "2.4.1",
     "reflect-metadata": "0.1.13",
     "winston": "3.8.2"
   }

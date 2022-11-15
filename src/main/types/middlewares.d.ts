@@ -1,4 +1,5 @@
-import { Request, Response } from 'express'
+import { Request, RequestHandler, Response } from 'express'
+import { Logger } from 'winston'
 
 import { Modify } from './helper'
 
@@ -8,6 +9,8 @@ export interface ErrorMw {
 
   errorMw: ErrorRequestAsyncHandler
 }
+
+export type LogMwFactory = (log: Logger) => RequestHandler
 
 export type ErrorRequestAsyncHandler = (
   err: RichError,

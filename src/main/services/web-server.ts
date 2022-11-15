@@ -8,6 +8,7 @@ import { Logger } from 'winston'
 
 import { InternalError } from '../errors/internal-error'
 import { errorMw } from '../middlewares/error'
+import { logMwFactory } from '../middlewares/log'
 import { notFound } from '../middlewares/not-found'
 import { RichError } from '../types/middlewares'
 import {
@@ -148,6 +149,7 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
   }
 
   public registerMw(app: express.Application): void {
+    this.registerLogMw(app)
     this.disableEtag(app)
     this.setTrustProxy(app)
     this.registerPingMw(app)
@@ -179,6 +181,11 @@ class WebServer extends ServiceBase<WebServerConfig> implements WebServerable {
     app.get('/ping', (__: express.Request, res: express.Response) => {
       res.status(204).end()
     })
+  }
+
+  public registerLogMw(app: express.Application): void {
+    const logMw = logMwFactory(this._log)
+    app.use(logMw)
   }
 }
 
