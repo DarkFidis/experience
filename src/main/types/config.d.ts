@@ -5,7 +5,12 @@ export interface LogConfig {
   name: string
 }
 
+export interface DbConfig {
+  dbName: string
+}
+
 export interface Config {
   cluster: ClusterConfig
   log: LogConfig
+  mongo: DbConfig
 }

@@ -1,2 +1,4 @@
 cluster:
   workers: 0
+mongo:
+  dbName: template-test
