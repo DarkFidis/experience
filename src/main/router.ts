@@ -6,6 +6,7 @@ import {
 import * as cookieParserFactory from 'cookie-parser'
 
 import { helloWorldMw } from './middlewares/hello-world'
+import * as userRouter from './routes/user'
 import { RegisterApp } from './types/web-server'
 import { toExpressMw } from './utils/helper'
 
@@ -16,5 +17,6 @@ const cookieParserMw = cookieParserFactory()
 
 export const registerApp: RegisterApp = (app) => {
   app.use(cookieParserMw, jsonBodyParserMw, urlencodedBodyParserMw, rawBodyParserMw)
+  app.use('/user', userRouter)
   app.get('/', toExpressMw(helloWorldMw))
 }

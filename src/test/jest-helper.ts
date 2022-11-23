@@ -41,13 +41,6 @@ const jestHelper: JestHelper = {
     } else if (props instanceof Error) {
       expect(err).toHaveProperty('message')
       expect(err.message).toMatch(props.message)
-      if ((props as any).extra) {
-        Object.keys((props as any).extra).forEach((name) => {
-          expect(err.extra).toHaveProperty(name)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          expect(err.extra[name]).toMatch((props as any).extra[name])
-        })
-      }
     } else if (typeof props === 'object' && props) {
       Object.keys(props).forEach((name) => {
         expect(err).toHaveProperty(name)

@@ -8,3 +8,5 @@ tmp/
 .gitversion
 *.tgz
 .DS_Store
+my stderr file
+my stdout file
