@@ -1,6 +1,7 @@
 import * as nodeConfig from 'config'
 
 import { Config } from './types/config'
+import { MongoConfig } from './types/mongo'
 
 export const cluster = nodeConfig.has('cluster')
   ? nodeConfig.get<Config['cluster']>('cluster')
@@ -20,6 +21,6 @@ const mongoUrl =
   process.env.NODE_ENV === 'production'
     ? `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}/${dbName}`
     : `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:27017/${dbName}`
-export const mongo = {
+export const mongo: MongoConfig = {
   url: mongoUrl,
 }
