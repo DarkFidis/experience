@@ -24,6 +24,9 @@ const helper: Helperable = {
     }),
   isArray: <T>(o: T | T[]): o is T[] => typeof o === 'object' && typeof o['length'] === 'number',
   isObject: <T>(o: T | T[]): o is T => typeof o === 'object' && typeof o['length'] !== 'number',
+  matchWith: (value: string, regex: string) => {
+    return new RegExp(regex).test(value)
+  },
   repeat: (count: number, iterator: (index: number) => void) => {
     Array.from(Array(count)).forEach((__, index) => {
       iterator(index)
