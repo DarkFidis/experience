@@ -11,7 +11,7 @@ import { expectPromiseToReject } from '../../jest-helper'
 describe('User middlewares unit tests', () => {
   let req: Request
   let res: Response
-  let User: jest.Mocked<UserModel>
+  let userModel: jest.Mocked<UserModel>
   let createUserMw
   let getAllUsersMw
   let getUserByIdMw
@@ -19,15 +19,15 @@ describe('User middlewares unit tests', () => {
   beforeAll(() => {
     req = new Request()
     res = new Response()
-    jest.doMock('../../../main/models/user.model', () => ({
-      User: {
+    jest.doMock('../../../main/models', () => ({
+      userModel: {
         create: jest.fn(),
         deleteOne: jest.fn(),
         find: jest.fn(),
         findById: jest.fn(),
       },
     }))
-    ;({ User } = require('../../../main/models/user.model'))
+    ;({ userModel } = require('../../../main/models'))
     ;({
       createUserMw,
       getAllUsersMw,
@@ -56,11 +56,11 @@ describe('User middlewares unit tests', () => {
         ...userToCreate,
       }
       // @ts-ignore
-      when(User.create).calledWith(userToCreate).mockResolvedValue(newUser)
+      when(userModel.create).calledWith(userToCreate).mockResolvedValue(newUser)
       // When
       await createUserMw(req as unknown as ExpressRequest, res as unknown as ExpressResponse)
       // Then
-      expect(User.create).toHaveBeenCalledWith(userToCreate)
+      expect(userModel.create).toHaveBeenCalledWith(userToCreate)
       expect(res.json).toHaveBeenCalledWith({ message: 'User created', success: true })
     })
     it('should throw an Internal error if user creation fails', async () => {
@@ -74,7 +74,7 @@ describe('User middlewares unit tests', () => {
       const error = new Error('oops')
       const expectedError = new InternalError(error.message)
       // @ts-ignore
-      when(User.create).calledWith(userToCreate).mockRejectedValue(error)
+      when(userModel.create).calledWith(userToCreate).mockRejectedValue(error)
       // When
       const promise: Promise<void> = createUserMw(
         req as unknown as ExpressRequest,
@@ -82,6 +82,7 @@ describe('User middlewares unit tests', () => {
       )
       // Then
       await expectPromiseToReject(promise, expectedError)
+      // Test du call de User.create
     })
   })
   describe('getAllUsersMw', () => {
@@ -105,20 +106,20 @@ describe('User middlewares unit tests', () => {
           password: 'password',
         },
       ]
-      when(User.find).calledWith().mockResolvedValue(users)
+      when(userModel.find).calledWith().mockResolvedValue(users)
       // When
       await getAllUsersMw(req as unknown as ExpressRequest, res as unknown as ExpressResponse)
       // Then
-      expect(User.find).toHaveBeenCalled()
+      expect(userModel.find).toHaveBeenCalled()
       expect(res.json).toHaveBeenCalledWith(expectedResult)
     })
     it('should return an empty array if no users', async () => {
       // Given
-      when(User.find).calledWith().mockResolvedValue([])
+      when(userModel.find).calledWith().mockResolvedValue([])
       // When
       await getAllUsersMw(req as unknown as ExpressRequest, res as unknown as ExpressResponse)
       // Then
-      expect(User.find).toHaveBeenCalled()
+      expect(userModel.find).toHaveBeenCalled()
       expect(res.json).toHaveBeenCalledWith([])
     })
   })
@@ -143,17 +144,17 @@ describe('User middlewares unit tests', () => {
         lastName: 'Doe',
         password: 'password',
       }
-      when(User.findById).calledWith(userId).mockResolvedValue(user)
+      when(userModel.findById).calledWith(userId).mockResolvedValue(user)
       // When
       await getUserByIdMw(req as unknown as ExpressRequest, res as unknown as ExpressResponse)
       // Then
-      expect(User.findById).toHaveBeenCalledWith(userId)
+      expect(userModel.findById).toHaveBeenCalledWith(userId)
       expect(res.json).toHaveBeenCalledWith(expectedUser)
     })
     it('should throw a BadRequestError given no user associated with given Id', async () => {
       // Given
       const userId = 'user_id'
-      when(User.findById).calledWith(userId).mockResolvedValue(null)
+      when(userModel.findById).calledWith(userId).mockResolvedValue(null)
       const expectedError = new BadRequestError('User not found')
       // When
       const promise: Promise<void> = getUserByIdMw(
@@ -162,7 +163,7 @@ describe('User middlewares unit tests', () => {
       )
       // Then
       await expectPromiseToReject(promise, expectedError)
-      expect(User.findById).toHaveBeenCalledWith(userId)
+      expect(userModel.findById).toHaveBeenCalledWith(userId)
     })
   })
   describe('deleteUserMw', () => {
@@ -179,14 +180,14 @@ describe('User middlewares unit tests', () => {
         lastName: 'Doe',
         password: 'password',
       }
-      when(User.findById).calledWith(userId).mockResolvedValue(user)
+      when(userModel.findById).calledWith(userId).mockResolvedValue(user)
       // @ts-ignore
-      when(User.deleteOne).calledWith({ _id: userId }).mockResolvedValue(true)
+      when(userModel.deleteOne).calledWith({ _id: userId }).mockResolvedValue(true)
       // When
       await deleteUserMw(req as unknown as ExpressRequest, res as unknown as ExpressResponse)
       // Then
-      expect(User.findById).toHaveBeenCalledWith(userId)
-      expect(User.deleteOne).toHaveBeenCalledWith({ _id: userId })
+      expect(userModel.findById).toHaveBeenCalledWith(userId)
+      expect(userModel.deleteOne).toHaveBeenCalledWith({ _id: userId })
     })
     it('should throw a BadRequest error if no User matches given Id', async () => {
       // Given
@@ -194,7 +195,7 @@ describe('User middlewares unit tests', () => {
       req.params = {
         userId,
       }
-      when(User.findById).calledWith(userId).mockResolvedValue(null)
+      when(userModel.findById).calledWith(userId).mockResolvedValue(null)
       const expectedError = new BadRequestError('User does not exists')
       // When
       const promise: Promise<void> = deleteUserMw(
@@ -203,7 +204,7 @@ describe('User middlewares unit tests', () => {
       )
       // Then
       await expectPromiseToReject(promise, expectedError)
-      expect(User.findById).toHaveBeenCalledWith(userId)
+      expect(userModel.findById).toHaveBeenCalledWith(userId)
     })
     it('should throw an Internal error if user deletion fails', async () => {
       // Given
@@ -218,10 +219,10 @@ describe('User middlewares unit tests', () => {
         lastName: 'Doe',
         password: 'password',
       }
-      when(User.findById).calledWith(userId).mockResolvedValue(user)
+      when(userModel.findById).calledWith(userId).mockResolvedValue(user)
       const error = new Error('oops')
       // @ts-ignore
-      when(User.deleteOne).calledWith({ _id: userId }).mockRejectedValue(error)
+      when(userModel.deleteOne).calledWith({ _id: userId }).mockRejectedValue(error)
       const expectedError = new InternalError(error.message)
       // When
       const promise: Promise<void> = deleteUserMw(
@@ -230,8 +231,8 @@ describe('User middlewares unit tests', () => {
       )
       // Then
       await expectPromiseToReject(promise, expectedError)
-      expect(User.findById).toHaveBeenCalledWith(userId)
-      expect(User.deleteOne).toHaveBeenCalledWith({ _id: userId })
+      expect(userModel.findById).toHaveBeenCalledWith(userId)
+      expect(userModel.deleteOne).toHaveBeenCalledWith({ _id: userId })
     })
   })
 })

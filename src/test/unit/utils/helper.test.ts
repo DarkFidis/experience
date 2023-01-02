@@ -80,6 +80,17 @@ describe('helper unit tests', () => {
       expect(result).toBe(true)
     })
   })
+  describe('matchWith', () => {
+    it('should return true if given value matches given regex', () => {
+      // Given
+      const value = 'foo'
+      const regexString = '\\S'
+      // When:
+      const result = helper.matchWith(value, regexString)
+      // Then
+      expect(result).toBe(true)
+    })
+  })
   describe('repeat', () => {
     test('should repeat 3 times', () => {
       // Given

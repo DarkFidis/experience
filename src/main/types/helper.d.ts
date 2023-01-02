@@ -7,6 +7,7 @@ export interface Helperable {
   fromCallback: <T>(fn: (cb: Callback<T>) => void) => Promise<T>
   isArray: <T>(o: T | T[]) => o is T[]
   isObject: <T>(o: T | T[]) => o is T
+  matchWith: (value: string, regex: string) => boolean
   repeat: (count: number, iterator: (index: number) => void) => void
   staticImplements: <T>() => (__: T) => void
   toExpressErrorMw: (

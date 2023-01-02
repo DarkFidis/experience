@@ -18,3 +18,5 @@ export interface E2eHelper {
     logInfoSpy: jest.SpyInstance<(...data: unknown[]) => void>,
   ) => (logMessage) => Promise<void>
 }
+
+export type GotResponse = Response<string>

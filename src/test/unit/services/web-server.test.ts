@@ -506,6 +506,7 @@ describe('web server unit tests', () => {
           expect(disableEtag).toHaveBeenCalledWith(app)
           expect(setTrustProxy).toHaveBeenCalledWith(app)
           expect(registerPingMw).toHaveBeenCalledWith(app)
+          expect(registerLogMw).toHaveBeenCalledWith(app)
           expect(app.use).toHaveBeenCalledWith(notFound)
           expect(toExpressErrorMw).toHaveBeenCalledWith(errorMw)
           expect(app.use).toHaveBeenCalledWith(errorExpressMw)
