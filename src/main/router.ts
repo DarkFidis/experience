@@ -7,6 +7,7 @@ import * as cookieParserFactory from 'cookie-parser'
 import * as corsFactory from 'cors'
 
 import { helloWorldMw } from './middlewares/hello-world'
+import * as userRouter from './routes/user'
 import { RegisterApp } from './types/web-server'
 import { toExpressMw } from './utils/helper'
 
@@ -18,5 +19,6 @@ const corsMw = corsFactory()
 
 export const registerApp: RegisterApp = (app) => {
   app.use(corsMw, cookieParserMw, jsonBodyParserMw, urlencodedBodyParserMw, rawBodyParserMw)
+  app.use('/user', userRouter)
   app.get('/', toExpressMw(helloWorldMw))
 }

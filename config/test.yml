@@ -2,4 +2,4 @@ cluster:
   workers: 0
 postgres:
   dbName: template-test
-  logging: true
+  logging: false

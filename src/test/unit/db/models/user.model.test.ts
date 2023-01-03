@@ -63,5 +63,30 @@ describe('User model unit tests', () => {
         expect(result).toStrictEqual(input)
       })
     })
+    describe('getOneByEmail', () => {
+      let getOneByOptionsSpy: jest.SpyInstance
+      beforeAll(() => {
+        getOneByOptionsSpy = jest.spyOn(UserModel.prototype, 'getOneByOptions').mockImplementation()
+      })
+      afterAll(() => {
+        getOneByOptionsSpy.mockRestore()
+      })
+      it('should retrieve user from given email', async () => {
+        // Given
+        const email = 'johndoe@gmail.com'
+        const user = {
+          age: 32,
+          firstName: 'John',
+          id: 1,
+          lastName: 'Doe',
+        }
+        when(getOneByOptionsSpy).calledWith({ email }).mockResolvedValue(user)
+        // When
+        const result = await userModel.getOneByEmail(email)
+        // Then
+        expect(getOneByOptionsSpy).toHaveBeenCalledWith({ email })
+        expect(result).toStrictEqual(user)
+      })
+    })
   })
 })

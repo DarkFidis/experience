@@ -46,6 +46,13 @@ abstract class BaseModel<Entity> implements BaseModelable<Entity> {
     }
     return this.model.remove(entity)
   }
+
+  public async clean() {
+    if (process.env.NODE_CONFIG_ENV !== 'production') {
+      return this.model.clear()
+    }
+    throw new Error('Clean does not work in production mode')
+  }
 }
 
 export { BaseModel }

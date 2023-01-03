@@ -52,17 +52,18 @@
     "typescript": "4.7.4"
   },
   "dependencies": {
+    "bcrypt": "5.1.0",
     "body-parser": "1.19.0",
     "class-validator": "0.13.2",
     "config": "3.3.7",
     "cookie-parser": "1.4.6",
     "cors": "2.8.5",
     "express": "4.17.1",
+    "lodash": "4.17.21",
     "on-finished": "2.4.1",
-    "reflect-metadata": "0.1.13",
-    "winston": "3.8.2",
     "pg": "8.8.0",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.3.10"
+    "typeorm": "0.3.10",
+    "winston": "3.8.2"
   }
 }
