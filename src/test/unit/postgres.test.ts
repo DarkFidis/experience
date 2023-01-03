@@ -30,7 +30,7 @@ describe('postgres', () => {
       database: 'express-template-test',
       entities: [User],
       host: 'localhost',
-      logging: true,
+      logging: false,
       password: process.env.DB_PASSWORD,
       port: 5432,
       synchronize: true,

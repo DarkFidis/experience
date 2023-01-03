@@ -14,4 +14,8 @@ export class UserModel extends BaseModel<User> {
     }
     return this.update(userInput)
   }
+
+  public async getOneByEmail(email: string) {
+    return this.getOneByOptions({ email })
+  }
 }

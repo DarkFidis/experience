@@ -19,6 +19,10 @@ export class User {
   email: string
 
   @Column()
+  @Length(8, 64)
+  password: string
+
+  @Column()
   @IsInt()
   age: number
 }

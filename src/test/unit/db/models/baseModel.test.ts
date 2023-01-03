@@ -3,9 +3,11 @@ import { Repository } from 'typeorm'
 
 import { BaseModel } from '../../../../main/db/models/baseModel'
 import { NotFoundError } from '../../../../main/errors/not-found-error'
+import { expectPromiseToReject } from '../../../jest-helper'
 
 describe('baseModel', () => {
   const entityMock = {
+    clear: jest.fn(),
     create: jest.fn(),
     find: jest.fn(),
     findOneBy: jest.fn(),
@@ -19,7 +21,7 @@ describe('baseModel', () => {
     }
   }
   describe('instance', () => {
-    let myBaseModel
+    let myBaseModel: MyBaseModel
     beforeEach(() => {
       myBaseModel = new MyBaseModel(entityMock)
     })
@@ -49,7 +51,7 @@ describe('baseModel', () => {
     describe('getById', () => {
       it('should return entry with ID', async () => {
         // Given
-        const id = 'my_id'
+        const id = 1
         const expectedResult = [
           {
             foo: 'bar',
@@ -217,6 +219,24 @@ describe('baseModel', () => {
           expect(getByIdSpy).toHaveBeenCalledWith(id)
           expect(entityMock.remove).not.toHaveBeenCalled()
         }
+      })
+    })
+
+    describe('clean', () => {
+      it('should clean all model data', async () => {
+        // When
+        await myBaseModel.clean()
+        // Then
+        expect(entityMock.clear).toHaveBeenCalled()
+      })
+      it('should throw an error within production config mode', async () => {
+        // Given
+        process.env.NODE_CONFIG_ENV = 'production'
+        const expectedError = new Error('Clean does not work in production mode')
+        // When
+        const promise = myBaseModel.clean()
+        await expectPromiseToReject(promise, expectedError)
+        expect(entityMock.clear).not.toHaveBeenCalled()
       })
     })
   })
