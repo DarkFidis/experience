@@ -9,12 +9,14 @@ describe('router unit tests', () => {
   let jsonBodyParser: jest.Mock
   let urlencodedBodyParser: jest.Mock
   let rawBodyParser: jest.Mock
-  let cookieParserFactory: jest.Mock
   let express: jest.Mocked<typeof jestExpress>
   let cookieParserMw: jest.Mock
   let registerApp: jest.Mocked<RegisterApp>
   let helloWorldMw: jest.Mock
   let toExpressMw: jest.Mock
+  let cookieParserFactory: jest.Mock
+  let corsFactory: jest.Mock
+  let corsMw: jest.Mock
   beforeAll(() => {
     jsonBodyParser = jest.fn()
     urlencodedBodyParser = jest.fn()
@@ -34,6 +36,10 @@ describe('router unit tests', () => {
       .mockReturnValue(urlencodedBodyParser)
     when(bodyParser.raw).calledWith({ limit: '10mb', type: '*/*' }).mockReturnValue(rawBodyParser)
     jest.doMock('body-parser', () => bodyParser)
+    jest.doMock('cors')
+    corsFactory = require('cors')
+    corsMw = jest.fn()
+    corsFactory.mockReturnValue(corsMw)
     jest.doMock('cookie-parser')
     cookieParserFactory = require('cookie-parser')
     cookieParserMw = jest.fn()
@@ -57,6 +63,7 @@ describe('router unit tests', () => {
       registerApp(app as Application)
       // Then
       expect(app.use).toHaveBeenCalledWith(
+        corsMw,
         cookieParserMw,
         jsonBodyParser,
         urlencodedBodyParser,

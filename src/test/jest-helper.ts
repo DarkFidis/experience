@@ -42,6 +42,7 @@ const jestHelper: JestHelper = {
       expect(err).toHaveProperty('message')
       expect(err.message).toMatch(props.message)
       if ((props as any).extra) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         Object.keys((props as any).extra).forEach((name) => {
           expect(err.extra).toHaveProperty(name)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
