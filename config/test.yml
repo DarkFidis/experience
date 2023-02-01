@@ -1,5 +1,5 @@
 cluster:
   workers: 0
 postgres:
-  dbName: express-template-test
+  dbName: template-test
   logging: true

@@ -3,6 +3,6 @@ cluster:
 log:
   name: Express-template
 postgres:
-  dbName: express-template
+  dbName: template
   host: localhost
   logging: false
