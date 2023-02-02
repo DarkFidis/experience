@@ -2,9 +2,10 @@ import { userModel } from '../db/models'
 import { BadRequestError } from '../errors/bad-request-error'
 import { InternalError } from '../errors/internal-error'
 import { RequestAsyncHandler } from '../types/middlewares'
+import { CreateUserMw } from '../types/user'
 import { hashPassword } from '../utils/user.utils'
 
-export const createUserMw: RequestAsyncHandler = async (req, res) => {
+export const createUserMw: CreateUserMw = async (req, res) => {
   const { input } = req.body
   const { password, ...userInput } = input
   const hashedPassword = await hashPassword(password as string)

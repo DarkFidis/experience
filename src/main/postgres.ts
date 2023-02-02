@@ -1,13 +1,13 @@
 import { DataSourceOptions } from 'typeorm'
 
 import { postgres } from './config'
-import { User } from './db/entities/User'
+import { Customer } from './db/entities/User'
 import { log } from './log'
 import { PgClient } from './services/pg-client'
 
 const dbConfig: DataSourceOptions = {
   database: postgres.dbName,
-  entities: [User],
+  entities: [Customer],
   host: postgres.host,
   logging: postgres.logging,
   password: process.env.DB_PASSWORD,

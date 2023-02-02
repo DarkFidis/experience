@@ -2,17 +2,13 @@ import { IsEmail, IsInt, Length } from 'class-validator'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
-export class User {
+export class Customer {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
   @Length(3, 20)
-  firstName: string
-
-  @Column()
-  @Length(3, 30)
-  lastName: string
+  username: string
 
   @Column()
   @IsEmail()

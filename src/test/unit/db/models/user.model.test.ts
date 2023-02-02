@@ -1,7 +1,7 @@
 import { when } from 'jest-when'
 import { Repository } from 'typeorm'
 
-import { User } from '../../../../main/db/entities/User'
+import { Customer } from '../../../../main/db/entities/User'
 import { UserModel } from '../../../../main/db/models/user.model'
 
 describe('User model unit tests', () => {
@@ -13,7 +13,7 @@ describe('User model unit tests', () => {
     remove: jest.fn(),
     save: jest.fn(),
     update: jest.fn(),
-  } as unknown as Repository<User>
+  } as unknown as Repository<Customer>
   describe('instance', () => {
     beforeEach(() => {
       userModel = new UserModel(entityMock)
@@ -33,8 +33,9 @@ describe('User model unit tests', () => {
         // Given
         const input = {
           age: 32,
-          firstName: 'John',
-          lastName: 'Doe',
+          email: 'jdoe@gmail.com',
+          password: 'password',
+          username: 'jdoe',
         }
         const entity = {
           ...input,
@@ -51,9 +52,10 @@ describe('User model unit tests', () => {
         // Given
         const input = {
           age: 32,
-          firstName: 'John',
+          email: 'jdoe@gmail.com',
           id: 1,
-          lastName: 'Doe',
+          password: 'password',
+          username: 'jdoe',
         }
         when(updateSpy).calledWith(input).mockResolvedValue(input)
         // When
@@ -76,9 +78,10 @@ describe('User model unit tests', () => {
         const email = 'johndoe@gmail.com'
         const user = {
           age: 32,
-          firstName: 'John',
+          email,
           id: 1,
-          lastName: 'Doe',
+          password: 'password',
+          username: 'jdoe',
         }
         when(getOneByOptionsSpy).calledWith({ email }).mockResolvedValue(user)
         // When

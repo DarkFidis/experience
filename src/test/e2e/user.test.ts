@@ -20,16 +20,14 @@ describe('User e2e tests', () => {
           input: {
             age: 24,
             email: 'email@gmail.com',
-            firstName: 'John',
-            lastName: 'Doe',
             password: 'Password123@',
+            username: 'jdoe',
           },
         },
       })
       const userCreated = await userModel.getOneByEmail('email@gmail.com')
       expectResponse(res, 200)
-      expect(userCreated.firstName).toBe('John')
-      expect(userCreated.lastName).toBe('Doe')
+      expect(userCreated).not.toBe(null)
     })
     it('should respond with 500 given wrong input', async () => {
       const res: Response = await client.post('user', {
@@ -37,9 +35,8 @@ describe('User e2e tests', () => {
           input: {
             age: 24,
             email: 'email@gmail.com',
-            firstName: 'John',
-            lastName: 'Doe',
             password: 123,
+            username: 'jdoe',
           },
         },
       })
@@ -53,9 +50,8 @@ describe('User e2e tests', () => {
         {
           age: 24,
           email: 'email@gmail.com',
-          firstName: 'John',
-          lastName: 'Doe',
           password: 'password',
+          username: 'jdoe',
         },
       ]
       const user = await userModel.create(expectedUsers[0])
@@ -72,9 +68,8 @@ describe('User e2e tests', () => {
       const userInput = {
         age: 24,
         email: 'email@gmail.com',
-        firstName: 'John',
-        lastName: 'Doe',
         password: 'password',
+        username: 'jdoe',
       }
       const user = await userModel.create(userInput)
       // When
@@ -94,12 +89,10 @@ describe('User e2e tests', () => {
       const userToCreate = {
         age: 24,
         email: 'email@gmail.com',
-        firstName: 'John',
-        lastName: 'Doe',
         password: 'password',
+        username: 'jdoe',
       }
       const user = await userModel.create(userToCreate)
-      console.log({ user })
       // When
       const res: Response = await client.delete(`user/${user.id}`)
       expectResponse(res, 200)

@@ -1,17 +1,18 @@
-import { Repository } from 'typeorm'
+import { DeepPartial, Repository } from 'typeorm'
 
-import { User } from '../entities/User'
+import { Customer } from '../entities/User'
 import { BaseModel } from './baseModel'
 
-export class UserModel extends BaseModel<User> {
-  constructor(entity: Repository<User>) {
+export class UserModel extends BaseModel<Customer> {
+  constructor(entity: Repository<Customer>) {
     super(entity)
   }
 
-  public async save(userInput: any) {
+  public async save(userInput: DeepPartial<Customer>) {
     if (!userInput.id) {
       return this.create(userInput)
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.update(userInput)
   }
 

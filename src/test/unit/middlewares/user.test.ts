@@ -3,6 +3,7 @@ import { Request } from 'jest-express/lib/request'
 import { Response } from 'jest-express/lib/response'
 import { when } from 'jest-when'
 
+import { Customer } from '../../../main/db/entities/User'
 import { UserModel } from '../../../main/db/models/user.model'
 import { BadRequestError } from '../../../main/errors/bad-request-error'
 import { InternalError } from '../../../main/errors/internal-error'
@@ -50,16 +51,14 @@ describe('User middlewares unit tests', () => {
       const userInput = {
         age: 21,
         email: 'email@gmail.com',
-        firstName: 'John',
-        lastName: 'Doe',
         password,
+        username: 'jdoe',
       }
       const userToCreate = {
         age: 21,
         email: 'email@gmail.com',
-        firstName: 'John',
-        lastName: 'Doe',
         password: hashedPassword,
+        username: 'jdoe',
       }
       req.body = {
         input: userInput,
@@ -118,13 +117,13 @@ describe('User middlewares unit tests', () => {
   describe('getAllUsersMw', () => {
     it('should retrieve all users', async () => {
       // Given
-      const users = [
+      const users: Customer[] = [
         {
+          age: 32,
           email: 'email@gmail.com',
-          firstName: 'John',
-          id: 'user_id',
-          lastName: 'Doe',
+          id: 1,
           password: 'password',
+          username: 'jdoe',
         },
       ]
       when(userModel.getAll).calledWith().mockResolvedValue(users)
@@ -152,11 +151,11 @@ describe('User middlewares unit tests', () => {
       }
       // Given
       const user = {
+        age: 32,
         email: 'email@gmail.com',
-        firstName: 'John',
         id: userId,
-        lastName: 'Doe',
         password: 'password',
+        username: 'jdoe',
       }
       when(userModel.getById).calledWith(userId).mockResolvedValue(user)
       // When
@@ -188,11 +187,11 @@ describe('User middlewares unit tests', () => {
         userId,
       }
       const user = {
+        age: 32,
         email: 'email@gmail.com',
-        firstName: 'John',
         id: userId,
-        lastName: 'Doe',
         password: 'password',
+        username: 'jdoe',
       }
       when(userModel.getById).calledWith(userId).mockResolvedValue(user)
       // @ts-ignore
@@ -227,11 +226,11 @@ describe('User middlewares unit tests', () => {
         userId,
       }
       const user = {
+        age: 32,
         email: 'email@gmail.com',
-        firstName: 'John',
         id: userId,
-        lastName: 'Doe',
         password: 'password',
+        username: 'jdoe',
       }
       when(userModel.getById).calledWith(userId).mockResolvedValue(user)
       const error = new Error('oops')

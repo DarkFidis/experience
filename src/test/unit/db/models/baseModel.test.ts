@@ -1,8 +1,9 @@
 import { when } from 'jest-when'
-import { Repository } from 'typeorm'
+import { Repository, UpdateResult } from 'typeorm'
 
 import { BaseModel } from '../../../../main/db/models/baseModel'
 import { NotFoundError } from '../../../../main/errors/not-found-error'
+import { BaseModelable } from '../../../../main/types/models'
 import { expectPromiseToReject } from '../../../jest-helper'
 
 describe('baseModel', () => {
@@ -21,7 +22,7 @@ describe('baseModel', () => {
     }
   }
   describe('instance', () => {
-    let myBaseModel: MyBaseModel
+    let myBaseModel: BaseModelable<any>
     beforeEach(() => {
       myBaseModel = new MyBaseModel(entityMock)
     })
@@ -144,13 +145,21 @@ describe('baseModel', () => {
           id: 'id',
           lastName: 'Doe',
         }
+        const expectedResult: UpdateResult = {
+          affected: 1,
+          generatedMaps: [{}],
+          raw: {},
+        }
         when(getByIdSpy).calledWith(input.id).mockResolvedValue(oldEntity)
+        when(entityMock.update as jest.Mock)
+          .calledWith(oldEntity.id, input)
+          .mockResolvedValue(expectedResult)
         // When
         const result = await myBaseModel.update(input)
         // Then
         expect(getByIdSpy).toHaveBeenCalledWith(input.id)
         expect(entityMock.update).toHaveBeenCalledWith(oldEntity.id, input)
-        expect(result).toStrictEqual(input)
+        expect(result).toStrictEqual(expectedResult)
       })
       it('should throw a NotFoundError given no entity corresponding to input ID', async () => {
         // Given

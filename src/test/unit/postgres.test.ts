@@ -2,19 +2,20 @@ import { when } from 'jest-when'
 import { DataSourceOptions } from 'typeorm'
 import { Logger } from 'winston'
 
+import { postgres } from '../../main/config'
 import { PgClientable } from '../../main/types/pg'
 
 describe('postgres', () => {
   let log: jest.Mocked<Logger>
   let PgClient: jest.Mock
-  let User
+  let Customer
   beforeAll(() => {
     jest.doMock('../../main/services/pg-client')
     ;({ PgClient } = require('../../main/services/pg-client'))
     jest.doMock('../../main/log')
     ;({ log } = require('../../main/log'))
     jest.doMock('../../main/db/entities/User')
-    ;({ User } = require('../../main/db/entities/User'))
+    ;({ Customer } = require('../../main/db/entities/User'))
     process.env = {
       DB_PASSWORD: 'test',
       DB_USER: 'test',
@@ -27,10 +28,10 @@ describe('postgres', () => {
   it('should create an instance of PG client', () => {
     // Given
     const dbOptions: DataSourceOptions = {
-      database: 'express-template-test',
-      entities: [User],
-      host: 'localhost',
-      logging: false,
+      database: postgres.dbName,
+      entities: [Customer],
+      host: postgres.host,
+      logging: postgres.logging,
       password: process.env.DB_PASSWORD,
       port: 5432,
       synchronize: true,

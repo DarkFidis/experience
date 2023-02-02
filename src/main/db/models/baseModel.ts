@@ -1,10 +1,12 @@
-import { Repository } from 'typeorm'
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm'
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 
 import { NotFoundError } from '../../errors/not-found-error'
 import { BaseModelable } from '../../types/models'
+import { ObjectLiteralWithId } from '../../types/pg'
 
-abstract class BaseModel<Entity> implements BaseModelable<Entity> {
-  protected _model: any
+abstract class BaseModel<Entity extends ObjectLiteralWithId> implements BaseModelable<Entity> {
+  protected _model: Repository<Entity>
   protected constructor(entity: Repository<Entity>) {
     this._model = entity
   }
@@ -17,26 +19,26 @@ abstract class BaseModel<Entity> implements BaseModelable<Entity> {
     return this.model.find()
   }
 
-  public async getById(id: number) {
+  public async getById(id) {
     return this.model.findOneBy({ id })
   }
 
-  public async getOneByOptions(options: any) {
+  public async getOneByOptions(options: FindOptionsWhere<Entity>) {
     return this.model.findOneBy(options)
   }
 
-  public async create(input) {
+  public async create(input: DeepPartial<Entity>) {
     const entity = this.model.create(input)
     return this.model.save(entity)
   }
 
-  public async update(input) {
-    const entityToUpdate = await this.getById(input.id as number)
+  public async update(input: QueryDeepPartialEntity<Entity>) {
+    // @ts-ignore
+    const entityToUpdate = await this.getById(input.id)
     if (!entityToUpdate) {
       throw new NotFoundError('Entity not found')
     }
-    await this.model.update(entityToUpdate.id, input)
-    return input
+    return this.model.update(entityToUpdate.id, input)
   }
 
   public async deleteById(id: number) {

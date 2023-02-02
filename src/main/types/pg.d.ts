@@ -1,4 +1,4 @@
-import { DataSourceOptions, EntityTarget, Repository } from 'typeorm'
+import { DataSourceOptions, EntityTarget, ObjectLiteral, Repository } from 'typeorm'
 import { Logger } from 'winston'
 
 import { Serviceable } from './service'
@@ -17,4 +17,8 @@ export interface PgClientable extends Serviceable<DataSourceOptions> {
 
 export interface PgConfig {
   url: string
+}
+
+export interface ObjectLiteralWithId extends ObjectLiteral {
+  id: number
 }

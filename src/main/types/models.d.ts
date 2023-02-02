@@ -1,11 +1,16 @@
-import { DeepPartial, Repository } from 'typeorm'
+import { DeepPartial, FindOptionsWhere, Repository, UpdateResult } from 'typeorm'
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 
-export interface BaseModelable<Entity> {
+import { ObjectLiteralWithId } from './pg'
+
+export interface BaseModelable<Entity extends ObjectLiteralWithId> {
   readonly model: Repository<Entity>
 
   getAll(): Promise<Entity[]>
-  getById(id: number): Promise<Entity>
+  getById(id: number): Promise<Entity | null>
+  getOneByOptions(options: FindOptionsWhere<Entity>): Promise<Entity | null>
   create(input: DeepPartial<Entity>): Promise<Entity>
-  update(input: DeepPartial<Entity>): Promise<Entity>
-  deleteById(id: number): Promise<void>
+  update(input: QueryDeepPartialEntity<Entity>): Promise<UpdateResult>
+  deleteById(id: number): Promise<Entity>
+  clean(): Promise<void>
 }
